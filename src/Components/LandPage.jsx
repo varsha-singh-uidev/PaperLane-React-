@@ -1,6 +1,15 @@
 import React from "react";
-
+import { useEffect, useState} from "react";
+import { Link } from "react-router-dom";
 const LandPage = () => {
+  const[page, setPage] = useState(false);
+  useEffect(() => {
+    let data = JSON.parse(localStorage.getItem("userDetail"));
+    console.log("inside the landPage",data?.state);
+    if(data?.state){
+      setPage(true); 
+    }
+  }, [])
   return (
     // Main Background of the page
     <div className="relative w-full h-screen overflow-hidden bg-gradient-to-b from-[#C7B8F3] via-[#E6EEFF] to-[#FCFCFF]">
@@ -35,13 +44,15 @@ const LandPage = () => {
         </p>
 
         {/* button */}
-        <button
+        <Link to={page? "/mainpage" :"/popup"}>
+         <button
           className="mt-10 text-white bg-[#5E8BFF] px-10 py-3 rounded-full font-medium
             shadow-[0_12px_30px_rgba(94,139,255,0.4)]
             hover:shadow-[0_18px_45px_rgba(94,139,255,0.6)]
             hover:-translate-y-1 transition-all duration-300 ">
           Start writing
         </button>
+        </Link>
       </div>
     </div>
   );
