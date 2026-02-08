@@ -1,7 +1,6 @@
 import React from 'react'
 import { useState, useEffect } from 'react';
 import ButtonComp from './ButtonComp';
-import { Link } from 'react-router-dom';
 
 const PopupPage = () => {
 
@@ -21,12 +20,15 @@ const PopupPage = () => {
     // updating the localStorage when the user enter the data into the field and enter to create the account
     function handler(e){
         e.preventDefault();
+        console.log("start")
         let userDetail = JSON.parse(localStorage.getItem("userDetail")); //read existing one
         userDetail.userName = name;
         userDetail.userEmail = email;
         userDetail.userPassword = password;
         userDetail.state = true;
         localStorage.setItem("userDetail", JSON.stringify(userDetail)); //save updated items in the localStorage
+        let data = JSON.parse(localStorage.getItem("userDetail"));
+        console.log("data",data);
     }
 
   return (
@@ -49,23 +51,21 @@ const PopupPage = () => {
              <div className='flex flex-col gap-[20px]'>
               <div className='flex flex-col'>
                 <label htmlFor="Name" className='text-[#7A8194] pl-[15px]'>Name</label>
-                <input id='Name' type="text" value={name} onChange={(e)=>setName(e.target.value)} className='bg-white border border-[#E4E8F2] w-[300px] pl-[20px] py-[4px] rounded-lg focus-border-[#5E8BFF] focus:ring-[#5B8CFF]/20 focus:ring-1 focus:outline-none transition'/>
+                <input id='Name' type="text" value={name} onChange={(e)=>setName(e.target.value)} className='bg-white border border-[#E4E8F2] w-[300px] pl-[20px] py-[4px] rounded-lg focus:border-[#5E8BFF] focus:ring-[#5B8CFF]/20 focus:ring-1 focus:outline-none transition'/>
               </div>
 
               <div className='flex flex-col'>
                 <label htmlFor="Email" className='text-[#7A8194] pl-[15px]'>Email</label>
-                <input id='Email' type="email" value={email} onChange={(e) => setEmail(e.target.value)} className='bg-white border border-[#E4E8F2] w-[300px] pl-[20px] py-[4px] rounded-lg focus-border-[#5E8BFF] focus:ring-[#5B8CFF]/20 focus:ring-1 focus:outline-none transition'/>
+                <input id='Email' type="email" value={email} onChange={(e) => setEmail(e.target.value)} className='bg-white border border-[#E4E8F2] w-[300px] pl-[20px] py-[4px] rounded-lg focus:border-[#5E8BFF] focus:ring-[#5B8CFF]/20 focus:ring-1 focus:outline-none transition'/>
               </div>
 
               <div className='flex flex-col'>
                 <label htmlFor="Password" className='text-[#7A8194] pl-[15px]'>Password</label>
-                <input id='Password' type="password" value={password} onChange={(e) => setPassword(e.target.value)} className='bg-white border border-[#E4E8F2] w-[300px] pl-[20px] py-[4px] rounded-lg focus-border-[#5E8BFF] focus:ring-[#5B8CFF]/20 focus:ring-1 focus:outline-none transition'/>
+                <input id='Password' type="password" value={password} onChange={(e) => setPassword(e.target.value)} className='bg-white border border-[#E4E8F2] w-[300px] pl-[20px] py-[4px] rounded-lg focus:border-[#5E8BFF] focus:ring-[#5B8CFF]/20 focus:ring-1 focus:outline-none transition'/>
               </div>
              </div>
 
-              <Link>
-                <ButtonComp text="Create Account"/>
-              </Link>
+            <ButtonComp text="Create Account"/>
 
           </form>
         </div>

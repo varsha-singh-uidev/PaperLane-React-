@@ -39,7 +39,7 @@ const LandPage = () => {
         </h1>
 
         {/* Description */}
-        <p className="mt-14 text-[#6B7396] text-base md:text-lg max-w-xl leading-relaxed font-light opacity-90">
+        <p className="my-14 text-[#6B7396] text-base md:text-lg max-w-xl leading-relaxed font-light opacity-90">
           From fleeting sparks to polished plans,
           <br />
           Paperlane turns every note into a journey worth keeping.
