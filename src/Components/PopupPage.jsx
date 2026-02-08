@@ -20,7 +20,16 @@ const PopupPage = () => {
     // updating the localStorage when the user enter the data into the field and enter to create the account
     function handler(e){
         e.preventDefault();
-        console.log("start")
+        // calling the validation on input field
+        if(!validateName(name)){
+          console.log("Error in Name");
+        }
+        if(!validateEmail(email)){
+          console.log("Error in email");
+        }
+        if(!validatePassword(password)){
+          console.log("Error in password");
+        }
         let userDetail = JSON.parse(localStorage.getItem("userDetail")); //read existing one
         userDetail.userName = name;
         userDetail.userEmail = email;
@@ -29,6 +38,36 @@ const PopupPage = () => {
         localStorage.setItem("userDetail", JSON.stringify(userDetail)); //save updated items in the localStorage
         let data = JSON.parse(localStorage.getItem("userDetail"));
         console.log("data",data);
+    }
+    // function for the name validation
+    function validateName(name){
+      let validName = name.trim();
+      if(validName.length >= 3){
+        return true;
+      }else{
+        return false;
+      }
+    }
+    // function for the email validation
+    function validateEmail(email){
+      
+    }
+    // function for the password validation
+    function validatePassword(password){
+      // if(/^[0-9A-Za-z@#$%^&*.,]{8,}$/.test(password)){
+      //   return true;
+      // }else{
+      //   return false;
+      // }
+      if(password.length < 8){
+        return `Password is atleast of 8 character`;
+      }else if(!(/^[0-9]$/.test(password))){
+        return `Password must contain Atleasr one number`;
+      }else if(!(/^[A-Z]$/.test(password))){
+        return `Password must contain alteast One upperCase character`;
+      }else{
+        return true;
+      }
     }
 
   return (
