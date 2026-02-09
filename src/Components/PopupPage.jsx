@@ -30,6 +30,7 @@ const PopupPage = () => {
         if(!validatePassword(password)){
           console.log("Error in password");
         }
+        // storing the data into the localStorage
         let userDetail = JSON.parse(localStorage.getItem("userDetail")); //read existing one
         userDetail.userName = name;
         userDetail.userEmail = email;
@@ -48,23 +49,37 @@ const PopupPage = () => {
         return false;
       }
     }
+    
     // function for the email validation
     function validateEmail(email){
-      
+      if(email.length < 6){
+        return `Email atleast 6 character long`;
+      }else{
+        let emailArr = email.split("@");
+        if(emailArr.length < 2){
+          return `Email either missing the domain or local part`;
+        }else{
+          if(emailArr[1].includes('..')){
+            return `Email contain consequtive (..) in domain part`;
+          }else if(/[A-Z]/.test(email)){
+            return `Email should not contain upperCase character`;
+          }
+        }
+      }  
     }
+    
     // function for the password validation
     function validatePassword(password){
-      // if(/^[0-9A-Za-z@#$%^&*.,]{8,}$/.test(password)){
-      //   return true;
-      // }else{
-      //   return false;
-      // }
       if(password.length < 8){
         return `Password is atleast of 8 character`;
-      }else if(!(/^[0-9]$/.test(password))){
-        return `Password must contain Atleasr one number`;
-      }else if(!(/^[A-Z]$/.test(password))){
-        return `Password must contain alteast One upperCase character`;
+      }else if(!(/^.*[0-9].*$/.test(password))){
+        return `Password must contain Atleast one number`;
+      }else if(!(/^.*[A-Z].*$/.test(password))){
+        return `Password must contain Alteast One upperCase character`;
+      }else if(!(/^.*[a-z].*$/.test(password))){
+        return `Password must contain Alteast One lowerCase character`;
+      }else if(!(/^.*[@#$%^&*.,].*$/.test(password))){
+        return `Password must contain Alteast One special character`;
       }else{
         return true;
       }
@@ -90,17 +105,17 @@ const PopupPage = () => {
              <div className='flex flex-col gap-[20px]'>
               <div className='flex flex-col'>
                 <label htmlFor="Name" className='text-[#7A8194] pl-[15px]'>Name</label>
-                <input id='Name' type="text" value={name} onChange={(e)=>setName(e.target.value)} className='bg-white border border-[#E4E8F2] w-[300px] pl-[20px] py-[4px] rounded-lg focus:border-[#5E8BFF] focus:ring-[#5B8CFF]/20 focus:ring-1 focus:outline-none transition'/>
+                <input id='Name' type="text" required value={name} onChange={(e)=>setName(e.target.value)} className='bg-white border border-[#E4E8F2] w-[300px] pl-[20px] py-[4px] rounded-lg focus:border-[#5E8BFF] focus:ring-[#5B8CFF]/20 focus:ring-1 focus:outline-none transition'/>
               </div>
 
               <div className='flex flex-col'>
                 <label htmlFor="Email" className='text-[#7A8194] pl-[15px]'>Email</label>
-                <input id='Email' type="email" value={email} onChange={(e) => setEmail(e.target.value)} className='bg-white border border-[#E4E8F2] w-[300px] pl-[20px] py-[4px] rounded-lg focus:border-[#5E8BFF] focus:ring-[#5B8CFF]/20 focus:ring-1 focus:outline-none transition'/>
+                <input id='Email' type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className='bg-white border border-[#E4E8F2] w-[300px] pl-[20px] py-[4px] rounded-lg focus:border-[#5E8BFF] focus:ring-[#5B8CFF]/20 focus:ring-1 focus:outline-none transition'/>
               </div>
 
               <div className='flex flex-col'>
                 <label htmlFor="Password" className='text-[#7A8194] pl-[15px]'>Password</label>
-                <input id='Password' type="password" value={password} onChange={(e) => setPassword(e.target.value)} className='bg-white border border-[#E4E8F2] w-[300px] pl-[20px] py-[4px] rounded-lg focus:border-[#5E8BFF] focus:ring-[#5B8CFF]/20 focus:ring-1 focus:outline-none transition'/>
+                <input id='Password' type="password" required value={password} onChange={(e) => setPassword(e.target.value)} className='bg-white border border-[#E4E8F2] w-[300px] pl-[20px] py-[4px] rounded-lg focus:border-[#5E8BFF] focus:ring-[#5B8CFF]/20 focus:ring-1 focus:outline-none transition'/>
               </div>
              </div>
 
