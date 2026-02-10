@@ -53,19 +53,37 @@ const PopupPage = () => {
     // function for the email validation
     function validateEmail(email){
       if(email.length < 6){
-        return `Email atleast 6 character long`;
-      }else{
-        let emailArr = email.split("@");
-        if(emailArr.length < 2){
-          return `Email either missing the domain or local part`;
-        }else{
-          if(emailArr[1].includes('..')){
-            return `Email contain consequtive (..) in domain part`;
-          }else if(/[A-Z]/.test(email)){
-            return `Email should not contain upperCase character`;
-          }
-        }
+        return `Email must be at least 6 characters long`;
       }  
+      const parts = email.split("@");
+      if(parts.length !== 2){
+        return "Email must contain one @ seperating local and domain parts";
+      }
+
+      const localPart = parts[0];
+      const domainPart = parts[1];
+
+      // uppercase check in the whole email
+      if(/[A-Z]/.test(email)){
+        return "Email should not contain uppercase letters"; 
+      }
+      // check for the localpart allowed character
+      if(!/^[0-9a-z._-]+$/.test(localPart)){
+        return "Local part may only contain lowercase letters, numbers, dots, hyphens and underscores";
+      }
+      // check if the domain contain the consecutive dots
+      if(domainPart.includes("..")){
+        return "Domain part of email must not contain consecutive dots";
+      }
+      // check the domain structure and also check it must contain one dot before the extension
+      if(/^[a-z0-9.-]+\.[a-z]{2,}$/.test(domainPart)){
+        return "Domain must contain a dot and valid extension";
+      }
+      // check if the domain start or end with the dot or hyphen.
+      if(/^[-.]/.test(domainPart) || /[-.]$/.test(domainPart)){
+        return "Domain must not start or end with a dot or hyphen";
+      }
+      return true;
     }
     
     // function for the password validation
@@ -86,7 +104,9 @@ const PopupPage = () => {
     }
 
   return (
+    // full background
     <div className="relative w-full h-screen overflow-hidden  bg-gradient-to-b from-[#C7B8F3] via-[#E6EEFF] to-[#FCFCFF]">
+      {/* background glowup */}
         <div className="absolute -top-24 -left-24 w-[300px] h-[300px] lg:w-[500px] lg:h-[500px] bg-[#AFA0FF] opacity-15 blur-[80px] rounded-full"></div>
         <div className="absolute -bottom-1 -right-2 w-[250px] h-[250px] lg:w-[450px] lg:h-[450px] bg-[#5E8BFF] opacity-15 blur-[100px] rounded-full"></div>
 
@@ -103,26 +123,36 @@ const PopupPage = () => {
 
             {/* input fields */}
              <div className='flex flex-col gap-[20px]'>
+
+              {/* name input */}
               <div className='flex flex-col'>
                 <label htmlFor="Name" className='text-[#7A8194] pl-[15px]'>Name</label>
                 <input id='Name' type="text" required value={name} onChange={(e)=>setName(e.target.value)} className='bg-white border border-[#E4E8F2] w-[300px] pl-[20px] py-[4px] rounded-lg focus:border-[#5E8BFF] focus:ring-[#5B8CFF]/20 focus:ring-1 focus:outline-none transition'/>
+                <span></span>
               </div>
 
+              {/* email input */}
               <div className='flex flex-col'>
                 <label htmlFor="Email" className='text-[#7A8194] pl-[15px]'>Email</label>
                 <input id='Email' type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className='bg-white border border-[#E4E8F2] w-[300px] pl-[20px] py-[4px] rounded-lg focus:border-[#5E8BFF] focus:ring-[#5B8CFF]/20 focus:ring-1 focus:outline-none transition'/>
+                <span></span>
               </div>
 
+              {/* password input */}
               <div className='flex flex-col'>
                 <label htmlFor="Password" className='text-[#7A8194] pl-[15px]'>Password</label>
                 <input id='Password' type="password" required value={password} onChange={(e) => setPassword(e.target.value)} className='bg-white border border-[#E4E8F2] w-[300px] pl-[20px] py-[4px] rounded-lg focus:border-[#5E8BFF] focus:ring-[#5B8CFF]/20 focus:ring-1 focus:outline-none transition'/>
+                <span></span>
               </div>
+
              </div>
-
+            
+            {/* button */}
             <ButtonComp text="Create Account"/>
-
           </form>
+
         </div>
+
     </div>
   )
 }
