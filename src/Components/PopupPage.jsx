@@ -13,6 +13,7 @@ const PopupPage = () => {
             localStorage.setItem("userDetail", JSON.stringify(userDetail));
         }
     }, []);
+
     // storing the user input into the useState
     const[name,setName] = useState("");
     const[email, setEmail] = useState("");
@@ -21,22 +22,34 @@ const PopupPage = () => {
     const [nameError, setNameError] = useState(""); 
     const [emailError, setEmailError] = useState(""); 
     const [passwordError, setPasswordError] = useState("");
+
     // updating the localStorage when the user enter the data into the field and enter to create the account
     function handler(e){
         e.preventDefault();
         // calling the validation on input field
+        let hasError = false;
+
         if(!validateName(name)){
           setNameError("Name atleast 3 character long");
+          hasError = true;
         }
 
         let emailReturn = validateEmail(email);
         if(emailReturn !== true){
           setEmailError(emailReturn);
+          hasError = true;
         }
         
-        // if(!validatePassword(password)){
-        //   console.log("Error in password");
-        // }
+        let passwordReturn = validatePassword(password);
+        if(passwordReturn !== true){
+          setPasswordError(passwordReturn);
+          hasError = true;
+        }
+        // if error occurs at any step stop there not store the data
+        if(hasError){
+          return;
+        }
+
         // storing the data into the localStorage
         let userDetail = JSON.parse(localStorage.getItem("userDetail")); //read existing one
         userDetail.userName = name;
@@ -47,6 +60,7 @@ const PopupPage = () => {
         let data = JSON.parse(localStorage.getItem("userDetail"));
         console.log("data",data);
     }
+
     // function for the name validation
     function validateName(name){
       let validName = name.trim();
@@ -83,7 +97,7 @@ const PopupPage = () => {
         return "Domain part of email must not contain consecutive dots";
       }
       // check the domain structure and also check it must contain one dot before the extension
-      if(/^[a-z0-9.-]+\.[a-z]{2,}$/.test(domainPart)){
+      if(!/^[a-z0-9.-]+\.[a-z]{2,}$/.test(domainPart)){
         return "Domain must contain a dot and valid extension";
       }
       // check if the domain start or end with the dot or hyphen.
@@ -138,7 +152,11 @@ const PopupPage = () => {
                 type="text" required 
                 value={name} 
                 onChange={(e)=>{setName(e.target.value), setNameError("")}} 
-                className={`bg-white border w-[300px] pl-[20px] py-[4px] rounded-lg focus:border-[#5E8BFF] focus:ring-[#5B8CFF]/20 focus:ring-1 focus:outline-none transition ${nameError ? "border-red-500" : "border-[#E4E8F2]"}`}/>
+                className={`not-only:border w-[300px] pl-[20px] py-[4px] rounded-lg transition 
+                ${nameError 
+                ? "border-red-500 focus:border-red-500 focus:ring-red-300" 
+                : "border-[#E4E8F2] focus:border-[#5E8BFF] focus:ring-[#5B8CFF]/20 bg-blue-100/60"} 
+                focus:ring-1 focus:outline-none`}/>
                 <span className={`text-[12px] ${nameError ? "text-red-500": ""}`}>{nameError}</span>
               </div>
 
@@ -148,8 +166,12 @@ const PopupPage = () => {
                 <input id='Email' 
                 type="email" required 
                 value={email} 
-                onChange={(e) => setEmail(e.target.value)} 
-                className={`bg-white border w-[300px] pl-[20px] py-[4px] rounded-lg focus:border-[#5E8BFF] focus:ring-[#5B8CFF]/20 focus:ring-1 focus:outline-none transition ${emailError ? "border-red-500" : "border-[#E4E8F2]"}`}/>
+                onChange={(e) => {setEmail(e.target.value), setEmailError("")}} 
+                className={` not-only:border w-[300px] pl-[20px] py-[4px] rounded-lg transition 
+                ${emailError 
+                ? "border-red-500 focus:border-red-500 focus:ring-red-300" 
+                : "border-[#E4E8F2] focus:border-[#5E8BFF] focus:ring-[#5B8CFF]/20 bg-blue-100/60"} 
+                focus:ring-1 focus:outline-none`}/>
                 <span className={`text-[12px] ${emailError ? "text-red-500": ""}`}>{emailError}</span>
               </div>
 
@@ -159,9 +181,13 @@ const PopupPage = () => {
                 <input id='Password' 
                 type="password" required 
                 value={password} 
-                onChange={(e) => setPassword(e.target.value)} 
-                className={`bg-white border w-[300px] pl-[20px] py-[4px] rounded-lg focus:border-[#5E8BFF] focus:ring-[#5B8CFF]/20 focus:ring-1 focus:outline-none transition ${nameError ? "border-red-500" : "border-[#E4E8F2]"}`}/>
-                <span className={`text-[12px] ${nameError ? "text-red-500": ""}`}>{nameError}</span>
+                onChange={(e) => {setPassword(e.target.value), setPasswordError("")}} 
+                className={`not-only:border w-[300px] pl-[20px] py-[4px] rounded-lg transition 
+                ${passwordError 
+                ? "border-red-500 focus:border-red-500 focus:ring-red-300" 
+                : "border-[#E4E8F2] focus:border-[#5E8BFF] focus:ring-[#5B8CFF]/20 bg-blue-100/60"} 
+                focus:ring-1 focus:outline-none`}/>
+                <span className={`text-[12px] ${passwordError ? "text-red-500": ""}`}>{passwordError}</span>
               </div>
 
              </div>
