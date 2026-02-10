@@ -17,19 +17,26 @@ const PopupPage = () => {
     const[name,setName] = useState("");
     const[email, setEmail] = useState("");
     const[password, setPassword] = useState("");
+
+    const [nameError, setNameError] = useState(""); 
+    const [emailError, setEmailError] = useState(""); 
+    const [passwordError, setPasswordError] = useState("");
     // updating the localStorage when the user enter the data into the field and enter to create the account
     function handler(e){
         e.preventDefault();
         // calling the validation on input field
         if(!validateName(name)){
-          console.log("Error in Name");
+          setNameError("Name atleast 3 character long");
         }
-        if(!validateEmail(email)){
-          console.log("Error in email");
+
+        let emailReturn = validateEmail(email);
+        if(emailReturn !== true){
+          setEmailError(emailReturn);
         }
-        if(!validatePassword(password)){
-          console.log("Error in password");
-        }
+        
+        // if(!validatePassword(password)){
+        //   console.log("Error in password");
+        // }
         // storing the data into the localStorage
         let userDetail = JSON.parse(localStorage.getItem("userDetail")); //read existing one
         userDetail.userName = name;
@@ -127,22 +134,34 @@ const PopupPage = () => {
               {/* name input */}
               <div className='flex flex-col'>
                 <label htmlFor="Name" className='text-[#7A8194] pl-[15px]'>Name</label>
-                <input id='Name' type="text" required value={name} onChange={(e)=>setName(e.target.value)} className='bg-white border border-[#E4E8F2] w-[300px] pl-[20px] py-[4px] rounded-lg focus:border-[#5E8BFF] focus:ring-[#5B8CFF]/20 focus:ring-1 focus:outline-none transition'/>
-                <span></span>
+                <input id='Name' 
+                type="text" required 
+                value={name} 
+                onChange={(e)=>{setName(e.target.value), setNameError("")}} 
+                className={`bg-white border w-[300px] pl-[20px] py-[4px] rounded-lg focus:border-[#5E8BFF] focus:ring-[#5B8CFF]/20 focus:ring-1 focus:outline-none transition ${nameError ? "border-red-500" : "border-[#E4E8F2]"}`}/>
+                <span className={`text-[12px] ${nameError ? "text-red-500": ""}`}>{nameError}</span>
               </div>
 
               {/* email input */}
               <div className='flex flex-col'>
                 <label htmlFor="Email" className='text-[#7A8194] pl-[15px]'>Email</label>
-                <input id='Email' type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className='bg-white border border-[#E4E8F2] w-[300px] pl-[20px] py-[4px] rounded-lg focus:border-[#5E8BFF] focus:ring-[#5B8CFF]/20 focus:ring-1 focus:outline-none transition'/>
-                <span></span>
+                <input id='Email' 
+                type="email" required 
+                value={email} 
+                onChange={(e) => setEmail(e.target.value)} 
+                className={`bg-white border w-[300px] pl-[20px] py-[4px] rounded-lg focus:border-[#5E8BFF] focus:ring-[#5B8CFF]/20 focus:ring-1 focus:outline-none transition ${emailError ? "border-red-500" : "border-[#E4E8F2]"}`}/>
+                <span className={`text-[12px] ${emailError ? "text-red-500": ""}`}>{emailError}</span>
               </div>
 
               {/* password input */}
               <div className='flex flex-col'>
                 <label htmlFor="Password" className='text-[#7A8194] pl-[15px]'>Password</label>
-                <input id='Password' type="password" required value={password} onChange={(e) => setPassword(e.target.value)} className='bg-white border border-[#E4E8F2] w-[300px] pl-[20px] py-[4px] rounded-lg focus:border-[#5E8BFF] focus:ring-[#5B8CFF]/20 focus:ring-1 focus:outline-none transition'/>
-                <span></span>
+                <input id='Password' 
+                type="password" required 
+                value={password} 
+                onChange={(e) => setPassword(e.target.value)} 
+                className={`bg-white border w-[300px] pl-[20px] py-[4px] rounded-lg focus:border-[#5E8BFF] focus:ring-[#5B8CFF]/20 focus:ring-1 focus:outline-none transition ${nameError ? "border-red-500" : "border-[#E4E8F2]"}`}/>
+                <span className={`text-[12px] ${nameError ? "text-red-500": ""}`}>{nameError}</span>
               </div>
 
              </div>
