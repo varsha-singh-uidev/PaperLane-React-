@@ -4,14 +4,15 @@ import { Link } from "react-router-dom";
 import ButtonComp from "./ButtonComp";
 
 const LandPage = () => {
+  // check the value in the localStorage for the navigation
   const[page, setPage] = useState(false);
   useEffect(() => {
     let data = JSON.parse(localStorage.getItem("userDetail"));
-    console.log("inside the landPage",data?.state);
     if(data?.state){
       setPage(true); 
     }
-  }, [])
+  }, []);
+
   return (
     // Main Background of the page
     <div className="relative w-full h-screen overflow-hidden bg-gradient-to-b from-[#C7B8F3] via-[#E6EEFF] to-[#FCFCFF]">

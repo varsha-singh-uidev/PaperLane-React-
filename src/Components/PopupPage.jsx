@@ -1,31 +1,39 @@
-import React from 'react'
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import ButtonComp from './ButtonComp';
+import { useNavigate } from 'react-router-dom';
 
 const PopupPage = () => {
-
-    // look into the localStorage when the page loads for the first time
-    useEffect(() => {
-        let data = JSON.parse(localStorage.getItem("userDetail"));
-        console.log("data",data);
-        if(data === null){
-            let userDetail = {userName : "", userEmail : "", userPassword : "", state : false}
-            localStorage.setItem("userDetail", JSON.stringify(userDetail));
-        }
-    }, []);
+    // used to navigate to the mainPage when there is valid value in the localStorage 
+    const navigate = useNavigate();
 
     // storing the user input into the useState
-    const[name,setName] = useState("");
-    const[email, setEmail] = useState("");
-    const[password, setPassword] = useState("");
+    const [name,setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
 
+    // if error occur store msg in them
     const [nameError, setNameError] = useState(""); 
     const [emailError, setEmailError] = useState(""); 
     const [passwordError, setPasswordError] = useState("");
 
+    // look into the localStorage when the page loads for the first time
+    useEffect(() => {
+        const data = JSON.parse(localStorage.getItem("userDetail"));
+        if(!data){
+            const userDetail = 
+            { userName : "", 
+              userEmail : "", 
+              userPassword : "", 
+              state : false,
+            };
+            localStorage.setItem("userDetail", JSON.stringify(userDetail));
+          }
+    }, []);
+
     // updating the localStorage when the user enter the data into the field and enter to create the account
     function handler(e){
         e.preventDefault();
+
         // calling the validation on input field
         let hasError = false;
 
@@ -34,13 +42,13 @@ const PopupPage = () => {
           hasError = true;
         }
 
-        let emailReturn = validateEmail(email);
+        const emailReturn = validateEmail(email);
         if(emailReturn !== true){
           setEmailError(emailReturn);
           hasError = true;
         }
         
-        let passwordReturn = validatePassword(password);
+        const passwordReturn = validatePassword(password);
         if(passwordReturn !== true){
           setPasswordError(passwordReturn);
           hasError = true;
@@ -57,8 +65,9 @@ const PopupPage = () => {
         userDetail.userPassword = password;
         userDetail.state = true;
         localStorage.setItem("userDetail", JSON.stringify(userDetail)); //save updated items in the localStorage
-        let data = JSON.parse(localStorage.getItem("userDetail"));
-        console.log("data",data);
+
+        // set navigate to the main page when there is valid value in the localStorage
+        navigate("/mainpage");
     }
 
     // function for the name validation
@@ -193,7 +202,7 @@ const PopupPage = () => {
              </div>
             
             {/* button */}
-            <ButtonComp text="Create Account"/>
+              <ButtonComp text="Create Account"/>
           </form>
 
         </div>
