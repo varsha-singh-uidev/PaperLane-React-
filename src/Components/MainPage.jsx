@@ -38,11 +38,19 @@ const MainPage = () => {
               <p className="mt-3 text-[12px] md:text-[16px] text-center font-medium text-[#1b2559] group-hover:text-[#5E8BFF] transition">+ Create New Note</p>
             </div>
             <div className='flex items-center justify-center'> 
-              {isPopUp && 
+              {/* {isPopUp && 
               (<CreateNoteModal 
               onClose={() => setIsPopUp(false)}
               onCreate={(noteData) => {setIsPopUp(false)}}/>)
-              }
+              } */}
+              {isPopUp && (
+              <div className="fixed inset-0 flex items-center justify-center bg-black/30">
+              <CreateNoteModal 
+                onClose={() => setIsPopUp(false)}
+                onCreate={(noteData) => { setIsPopUp(false) }}
+              />
+              </div>
+              )}
             </div>
         </div>
       </div>
