@@ -20,8 +20,8 @@ const CreateNoteModal = ({onClose}) => {
   }
 
   function titleHandler(){
-    if(setNoteTitle === ""){
-      setNoteError("")
+    if(noteTitle === ""){
+      setNoteError("Enter the Note Title first");
     }
   }
   
@@ -41,12 +41,13 @@ const CreateNoteModal = ({onClose}) => {
           id='title'
           type="text"
           value={noteTitle}
-          onChange={(e) => setNoteTitle(e.target.value)} 
+          onChange={(e) => {setNoteTitle(e.target.value), setNoteError("")}} 
           placeholder='First note' 
-          className='bg-[#F2F4F8] w-[250px] rounded-sm px-2.5 py-1 border border-[#5B8CFF] text-[#111827] placeholder:text-[#9CA3AF] placeholder:text-sm focus:outline-none mb-5'
+          className='bg-[#F2F4F8] w-[250px] rounded-sm px-2.5 py-1 border border-[#5B8CFF] text-[#111827] placeholder:text-[#9CA3AF] placeholder:text-sm focus:outline-none'
           />
+          <span className={`${noteError !== "" ? "pl-1.5 text-sm text-red-500 mt-1.5" : ""}`}>{noteError}</span>
 
-          <label htmlFor="password" className='text-sm pl-1.5 text-gray-700'>Password (Optional)</label> 
+          <label htmlFor="password" className='text-sm pl-1.5 text-gray-700 mt-5'>Password (Optional)</label> 
           <input 
           id='password'
           type="password" 

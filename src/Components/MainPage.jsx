@@ -1,9 +1,12 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import MainPageRoute from './MainPageRoute'
 import CreateNoteModal from './CreateNoteModal';
 
 const MainPage = () => {
   const [isPopUp, setIsPopUp] = useState(false);
+  useEffect(() => {
+    let data = JSON.parse(localStorage.getItem("NoteArray"));
+  })
   return (
     <>
       {/* main Conatainer */}
