@@ -1,6 +1,15 @@
-import React from 'react'
+import React, {useState} from 'react'
 
 const CreateNoteModal = () => {
+  const [selectedCover, setSelectedCover] = useState(1);
+  
+  function coverHandler(e){
+    const li = e.target.closest("li");
+    if(!li) return;
+    const id = li.dataset.id;
+    setSelectedCover(Number(id));
+  }
+  
   return (
     <>
       <div className='flex w-[500px] flex-col justify-center items-center shadow-2xl rounded-4xl p-6'>
@@ -21,11 +30,11 @@ const CreateNoteModal = () => {
         <div>
           <p className='text-[20px]'>Note Cover</p>
           {/* option of different cover */}
-          <ul className='flex gap-5 my-4'>
-            <li><img src="Cover/cover.png" alt="cover"  className='w-[45px] h-[45px]'/></li>
-            <li><img src="Cover/cover1.png" alt="cover" className='w-[45px] h-[45px]'/></li>
-            <li><img src="Cover/cover2.png" alt="cover" className='w-[45px] h-[45px]'/></li>
-            <li><img src="Cover/cover7.png" alt="cover" className='w-[45px] h-[45px]'/></li>
+          <ul className='flex gap-5 my-4' onClick={(e) => coverHandler(e)}>
+            <li data-id="1" className={selectedCover === 1 ? "border-2 border-[#5B8CFF]" : ""}><img src="Cover/cover.png" alt="cover"  className='w-[45px] h-[45px]'/></li>
+            <li data-id="2" className={selectedCover === 2 ? "border-2 border-[#5B8CFF]" : ""}><img src="Cover/cover1.png" alt="cover" className='w-[45px] h-[45px]'/></li>
+            <li data-id="3" className={selectedCover === 3 ? "border-2 border-[#5B8CFF]" : ""}><img src="Cover/cover2.png" alt="cover" className='w-[45px] h-[45px]'/></li>
+            <li data-id="4" className={selectedCover === 4 ? "border-2 border-[#5B8CFF]" : ""}><img src="Cover/cover7.png" alt="cover" className='w-[45px] h-[45px]'/></li>
           </ul>
         </div>
 

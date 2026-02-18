@@ -33,7 +33,7 @@ const MainPage = () => {
             {/* create new note */}
             <div className='flex flex-col w-[100px] h-[180px] md:w-[160px] md:h-[230px] items-center cursor-pointer group transition' onClick={() => setIsPopUp(true)}>
               <div className="overflow-hidden rounded-2xl shadow-md group-hover:shadow-xl group-hover:-translate-y-1.5 transition duration-300">
-                 <img src="/Cover/cover7.png" alt="Create Note" className="rounded-2xl group-hover:scale-105 transition duration-300"/>
+                 <img src="/Cover/cover.png" alt="Create Note" className="rounded-2xl group-hover:scale-105 transition duration-300"/>
               </div>
               <p className="mt-3 text-[12px] md:text-[16px] text-center font-medium text-[#1b2559] group-hover:text-[#5E8BFF] transition">+ Create New Note</p>
             </div>
