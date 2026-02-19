@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 
-const CreateNoteModal = ({onClose}) => {
+const CreateNoteModal = ({onClose, onCreate}) => {
   // state for the note cover
   const [selectedCover, setSelectedCover] = useState(1);
 
@@ -19,10 +19,30 @@ const CreateNoteModal = ({onClose}) => {
     setSelectedCover(Number(id));
   }
 
-  function titleHandler(){
+  function handlerTitle(e){
+    setNoteTitle(e.target.value); 
+    setNoteError("");
+  }
+
+  function handleCreateNote(){
     if(noteTitle === ""){
       setNoteError("Enter the Note Title first");
+      return;
     }
+    let noteData = {
+      id : Date.now(),
+      title : noteTitle,
+      password : (notePassword ?? ""),
+      cover : selectedCover,
+      createdAt : new Date()
+    }
+
+    let existingNotes = JSON.parse(localStorage.getItem("paperlane_notes")) || [];
+    existingNotes.push(noteData);
+
+    // localStorage.setItem("paperlane_notes", JSON.stringify(existingNotes));
+
+    onCreate(noteData);
   }
   
   return (
@@ -41,7 +61,7 @@ const CreateNoteModal = ({onClose}) => {
           id='title'
           type="text"
           value={noteTitle}
-          onChange={(e) => {setNoteTitle(e.target.value), setNoteError("")}} 
+          onChange={(e) => {handlerTitle(e)}} 
           placeholder='First note' 
           className='bg-[#F2F4F8] w-[250px] rounded-sm px-2.5 py-1 border border-[#5B8CFF] text-[#111827] placeholder:text-[#9CA3AF] placeholder:text-sm focus:outline-none'
           />
@@ -53,7 +73,7 @@ const CreateNoteModal = ({onClose}) => {
           type="password" 
           value={notePassword}
           onChange={(e) => setNotePassword(e.target.value)}
-          placeholder='*****' 
+          placeholder='******' 
           className='bg-[#F2F4F8] w-[250px] rounded-sm px-2.5 py-1 border border-[#5B8CFF] text-[#111827] placeholder:text-[#9CA3AF] focus:outline-none'
           />
         </div>
@@ -63,17 +83,17 @@ const CreateNoteModal = ({onClose}) => {
           <p className='text-[20px]'>Note Cover</p>
           {/* option of different cover */}
           <ul className='flex gap-5 my-4' onClick={(e) => coverHandler(e)}>
-            <li data-id="1" className={selectedCover === 1 ? "border-2 border-[#5B8CFF] rounded-md" : ""}><img src="Cover/cover.png" alt="cover"  className='w-[45px] h-[45px] rounded-sm'/></li>
-            <li data-id="2" className={selectedCover === 2 ? "border-2 border-[#5B8CFF] rounded-md" : ""}><img src="Cover/cover1.png" alt="cover" className='w-[45px] h-[45px] rounded-sm'/></li>
-            <li data-id="3" className={selectedCover === 3 ? "border-2 border-[#5B8CFF] rounded-md" : ""}><img src="Cover/cover2.png" alt="cover" className='w-[45px] h-[45px] rounded-sm'/></li>
-            <li data-id="4" className={selectedCover === 4 ? "border-2 border-[#5B8CFF] rounded-md" : ""}><img src="Cover/cover7.png" alt="cover" className='w-[45px] h-[45px] rounded-sm'/></li>
+            <li data-id="1" className={selectedCover === 1 ? "border-2 border-[#5B8CFF] rounded-md" : ""}><img src="Cover/cover1.png" alt="cover"  className='w-[45px] h-[45px] rounded-sm'/></li>
+            <li data-id="2" className={selectedCover === 2 ? "border-2 border-[#5B8CFF] rounded-md" : ""}><img src="Cover/cover2.png" alt="cover" className='w-[45px] h-[45px] rounded-sm'/></li>
+            <li data-id="3" className={selectedCover === 3 ? "border-2 border-[#5B8CFF] rounded-md" : ""}><img src="Cover/cover3.png" alt="cover" className='w-[45px] h-[45px] rounded-sm'/></li>
+            <li data-id="4" className={selectedCover === 4 ? "border-2 border-[#5B8CFF] rounded-md" : ""}><img src="Cover/cover4.png" alt="cover" className='w-[45px] h-[45px] rounded-sm'/></li>
           </ul>
         </div>
 
         {/* option button */}
         <div className='flex mt-6 gap-10'>
           <button className='bg-[#5B8CFF] text-[#ffffff] rounded-sm px-3 py-1 hover:shadow-[0_10px_30px_rgba(94,139,255,0.6)]
-            hover:-translate-y-1 transition-all duration-300' onClick={titleHandler}>Create Note</button>
+            hover:-translate-y-1 transition-all duration-300' onClick={handleCreateNote}>Create Note</button>
           <button className='bg-[#D7D7D7] text-[#6B7280] border-[#E6EEFF] rounded-sm px-3 py-1' onClick={onClose}>Cancel</button>
         </div>
       </div>

@@ -4,9 +4,18 @@ import CreateNoteModal from './CreateNoteModal';
 
 const MainPage = () => {
   const [isPopUp, setIsPopUp] = useState(false);
+  const [notes, setNotes] = useState([]);
+
   useEffect(() => {
-    let data = JSON.parse(localStorage.getItem("NoteArray"));
-  })
+    let existingNotes = JSON.parse(localStorage.getItem("paperlane_notes")) || [];
+    setNotes(existingNotes);
+  }, []);
+
+  function handler(noteData){
+    setIsPopUp(false);
+    setNotes(prev => [...prev, noteData]);
+  }
+
   return (
     <>
       {/* main Conatainer */}
@@ -31,29 +40,34 @@ const MainPage = () => {
         <hr />
 
         {/* main body of the main page */}
-        <div className='mt-[50px] my-[20px] md:mx-[50px] px-[50px]'>
+        <div className='mt-[50px] my-[20px] md:mx-[50px] px-[50px] flex flex-wrap gap-[40px]'>
 
             {/* create new note */}
             <div className='flex flex-col w-[100px] h-[180px] md:w-[160px] md:h-[230px] items-center cursor-pointer group transition' onClick={() => setIsPopUp(true)}>
               <div className="overflow-hidden rounded-2xl shadow-md group-hover:shadow-xl group-hover:-translate-y-1.5 transition duration-300">
-                 <img src="/Cover/cover.png" alt="Create Note" className="rounded-2xl group-hover:scale-105 transition duration-300"/>
+                 <img src="/Cover/cover1.png" alt="Create Note" className="rounded-2xl group-hover:scale-105 transition duration-300"/>
               </div>
               <p className="mt-3 text-[12px] md:text-[16px] text-center font-medium text-[#1b2559] group-hover:text-[#5E8BFF] transition">+ Create New Note</p>
             </div>
             <div className='flex items-center justify-center'> 
-              {/* {isPopUp && 
-              (<CreateNoteModal 
-              onClose={() => setIsPopUp(false)}
-              onCreate={(noteData) => {setIsPopUp(false)}}/>)
-              } */}
               {isPopUp && (
               <div className="fixed inset-0 flex items-center justify-center bg-black/30">
               <CreateNoteModal 
                 onClose={() => setIsPopUp(false)}
-                onCreate={(noteData) => { setIsPopUp(false) }}
+                onCreate={(noteData) => {handler(noteData)}}
               />
               </div>
               )}
+            </div>
+            <div className='flex flex-wrap gap-[30px]'>
+              {notes.map(note => (
+                <div className='flex flex-col w-[100px] h-[180px] md:w-[160px] md:h-[230px] items-center cursor-pointer'>
+                  <div className="overflow-hidden rounded-2xl shadow-md">
+                    <img src={`Cover/cover${note.cover}.png`} alt="Create Note" className="rounded-2xl"/>
+                  </div>
+                  <p className="mt-3 text-[12px] md:text-[16px] text-center font-medium text-[#1b2559]">{note.title}</p>
+                </div>
+              ))}
             </div>
         </div>
       </div>
