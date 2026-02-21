@@ -1,6 +1,10 @@
 import React, {useState} from 'react'
 
 const CreateNoteModal = ({onClose, onCreate}) => {
+  // create date object to get the date and time when the note is build first
+  const dateObj = new Date();
+  const dateObjArr = dateObj.toLocaleString().split(",");
+
   // state for the note cover
   const [selectedCover, setSelectedCover] = useState(1);
 
@@ -11,7 +15,6 @@ const CreateNoteModal = ({onClose, onCreate}) => {
   const [noteTitle, setNoteTitle] = useState("");
   const [notePassword, setNotePassword] = useState("");
  
-
   function coverHandler(e){
     const li = e.target.closest("li");
     if(!li) return;
@@ -34,14 +37,15 @@ const CreateNoteModal = ({onClose, onCreate}) => {
       title : noteTitle,
       password : (notePassword ?? ""),
       cover : selectedCover,
-      createdAt : new Date()
+      createdAtDate : dateObjArr[0],
+      createdAtTime : dateObjArr[1]
     }
 
     let existingNotes = JSON.parse(localStorage.getItem("paperlane_notes")) || [];
     existingNotes.push(noteData);
 
-    // localStorage.setItem("paperlane_notes", JSON.stringify(existingNotes));
-
+    setNotePassword("");
+    setNoteTitle("");
     onCreate(noteData);
   }
   

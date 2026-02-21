@@ -11,6 +11,11 @@ const MainPage = () => {
     setNotes(existingNotes);
   }, []);
 
+  // update the notes whenever the new note is added
+  useEffect(() => {
+    localStorage.setItem("paperlane_notes", JSON.stringify(notes));
+  }, [notes]);
+
   function handler(noteData){
     setIsPopUp(false);
     setNotes(prev => [...prev, noteData]);
@@ -66,6 +71,8 @@ const MainPage = () => {
                     <img src={`Cover/cover${note.cover}.png`} alt="Create Note" className="rounded-2xl"/>
                   </div>
                   <p className="mt-3 text-[12px] md:text-[16px] text-center font-medium text-[#1b2559]">{note.title}</p>
+                  <p>{note.createdAtDate}</p>
+                  <p>{note.createdAtTime}</p>
                 </div>
               ))}
             </div>
