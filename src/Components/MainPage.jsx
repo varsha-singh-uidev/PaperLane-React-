@@ -65,6 +65,7 @@ const MainPage = () => {
               )}
             </div>
             <div className='flex flex-wrap gap-[30px]'>
+              {/* display the newly created note */}
               {notes.map(note => (
                 <div className='flex flex-col w-[100px] h-[180px] md:w-[160px] md:h-[230px] items-center cursor-pointer'>
                   <div className="overflow-hidden rounded-2xl shadow-md">
@@ -74,7 +75,7 @@ const MainPage = () => {
                   <p>{note.createdAtDate}</p>
                   <p>{note.createdAtTime}</p>
                 </div>
-              ))}
+              ))}            
             </div>
         </div>
       </div>
