@@ -13,12 +13,18 @@ const MainPage = () => {
 
   // update the notes whenever the new note is added
   useEffect(() => {
-    localStorage.setItem("paperlane_notes", JSON.stringify(notes));
+    if(notes.length > 0){
+      localStorage.setItem("paperlane_notes", JSON.stringify(notes));
+    }
   }, [notes]);
 
   function handler(noteData){
     setIsPopUp(false);
-    setNotes(prev => [...prev, noteData]);
+    setNotes(prev => {
+      const updated = [...prev, noteData];
+      localStorage.setItem("paperlane_notes", JSON.stringify(updated));
+      return updated;
+    })
   }
 
   return (
@@ -66,16 +72,46 @@ const MainPage = () => {
             </div>
             <div className='flex flex-wrap gap-[30px]'>
               {/* display the newly created note */}
-              {notes.map(note => (
-                <div className='flex flex-col w-[100px] h-[180px] md:w-[160px] md:h-[230px] items-center cursor-pointer'>
+              {/* {notes.map(note => (
+                <div key={note.id} className='flex flex-col w-[100px] h-[180px] md:w-[160px] md:h-[230px] items-center cursor-pointer'>
                   <div className="overflow-hidden rounded-2xl shadow-md">
                     <img src={`Cover/cover${note.cover}.png`} alt="Create Note" className="rounded-2xl"/>
                   </div>
                   <p className="mt-3 text-[12px] md:text-[16px] text-center font-medium text-[#1b2559]">{note.title}</p>
                   <p>{note.createdAtDate}</p>
-                  <p>{note.createdAtTime}</p>
                 </div>
-              ))}            
+              ))} */}
+
+              {notes.map(note => (
+              <div key={note.id} 
+              className="flex flex-col w-[100px] h-[180px] md:w-[160px] md:h-[230px] items-center cursor-pointer group">
+              {/* Cover */}
+                {note.password === "" ?
+                // unlock note
+                (<div className="relative overflow-hidden rounded-xl group-hover:shadow-xl duration-300">
+                  <img src={`Cover/cover${note.cover}.png`} alt="Note Cover" 
+                  className="w-full h-full object-cover rounded-xl group-hover:scale-105 transition duration-300"/>
+                </div>):
+                // locked note 
+                (<div className="relative overflow-hidden rounded-xl group-hover:shadow-xl duration-300 w-full h-full">
+                  <img src={`Cover/cover${note.cover}.png`} alt="Note Cover" 
+                  className="w-full h-full object-cover rounded-xl filter blur-sm brightness-90"/>
+                  <div className='absolute top-1/2 left-1/2 w-[38px] h-[38px] rounded-full bg-white flex items-center justify-center transform -translate-x-1/2 -translate-y-1/2 z-10 shadow-md'>
+                    <img src="Cover/lock.png" alt="Lock Note" className="w-6 h-6"/>
+                  </div>
+                </div>)}
+
+              {/* Title */}
+                <p className="mt-3 text-base font-semibold text-[#1b2559] text-center group-hover:text-[#5E8BFF] transition">
+                  {note.title}
+                </p>
+
+              {/* Date */}
+                <p className="text-xs text-gray-500">
+                  {note.createdAtDate}
+                </p>
+              </div>
+              ))}
             </div>
         </div>
       </div>

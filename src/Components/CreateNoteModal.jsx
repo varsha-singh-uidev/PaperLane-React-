@@ -41,10 +41,7 @@ const CreateNoteModal = ({onClose, onCreate}) => {
       createdAtDate : date,
       createdAtTime : time
     }
-
-    // let existingNotes = JSON.parse(localStorage.getItem("paperlane_notes")) || [];
-    // existingNotes.push(noteData);
-
+    
     setNotePassword("");
     setNoteTitle("");
     onCreate(noteData);
