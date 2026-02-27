@@ -53,6 +53,7 @@ const PopupPage = () => {
           setPasswordError(passwordReturn);
           hasError = true;
         }
+        
         // if error occurs at any step stop there not store the data
         if(hasError){
           return;

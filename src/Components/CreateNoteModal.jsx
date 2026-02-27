@@ -9,13 +9,15 @@ const CreateNoteModal = ({onClose, onCreate}) => {
   // state for the note cover
   const [selectedCover, setSelectedCover] = useState(1);
 
-  // state for the note title error
+  // state for the note title error and password error
   const [noteError, setNoteError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
 
   // state for the title and password
   const [noteTitle, setNoteTitle] = useState("");
   const [notePassword, setNotePassword] = useState("");
  
+  // handle the cover of the note
   function coverHandler(e){
     const li = e.target.closest("li");
     if(!li) return;
@@ -23,16 +25,51 @@ const CreateNoteModal = ({onClose, onCreate}) => {
     setSelectedCover(Number(id));
   }
 
+  // title input handler and erase error msg 
   function handlerTitle(e){
     setNoteTitle(e.target.value); 
     setNoteError("");
   }
 
+  // password input handler and erase error msg 
+  function handlerPassword(e){
+    setNotePassword(e.target.value);
+    setPasswordError("");
+  }
+
+  // password Validation
+  function validatePassword(notePassword){
+    if(notePassword === ""){
+      return true;
+    }else if(notePassword.length < 6){
+      return `Password is Atleast 6 character`;
+    }else if(!(/^.*[0-9].*$/.test(notePassword))){
+      return `Password must contain Atleast one number`;
+    }else if(!(/^.*[a-z].*$/.test(notePassword))){
+      return `Password must contain Atleast one lowercase character`;
+    }else if(!(/^.*[A-Z].*$/.test(notePassword))){
+      return `Password must contain Atleast one uppercase character`;
+    }else if(!(/^.*[@#$%^&*.,].*$/.test(notePassword))){
+      return `Password must contain Atleast one special character`;
+    }else{
+      return true;
+    }
+  }
+
+  // handler that work on the create note button press
   function handleCreateNote(){
+    
     if(noteTitle === ""){
       setNoteError("Enter the Note Title first");
       return;
     }
+    
+    let passwordReturn = validatePassword(notePassword);
+    if(passwordReturn !== true){
+      setPasswordError(passwordReturn);
+      return;
+    }
+
     let noteData = {
       id : Date.now(),
       title : noteTitle,
@@ -74,10 +111,11 @@ const CreateNoteModal = ({onClose, onCreate}) => {
           id='password'
           type="password" 
           value={notePassword}
-          onChange={(e) => setNotePassword(e.target.value)}
+          onChange={(e) => {handlerPassword(e)}}
           placeholder='******' 
           className='bg-[#F2F4F8] w-[250px] rounded-sm px-2.5 py-1 border border-[#5B8CFF] text-[#111827] placeholder:text-[#9CA3AF] focus:outline-none'
           />
+          <span className={`${passwordError !== "" ? "pl-1.5 text-sm text-red-500 mt-1.5 w-[250px]" : ""}`}>{passwordError}</span>
         </div>
 
         {/* choose the note cover */}
