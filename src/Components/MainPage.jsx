@@ -33,9 +33,8 @@ const MainPage = () => {
   // function that help to search the note 
   function searchHandler(e){
     let search = e.target.value.toLowerCase();
-    console.log("what you type in the search bar", search);
     if(search === ""){
-      setSearchResult([]);
+      setSearchResult([]); //reset when empty
     }else{
       setSearchResult(notes.filter(note => 
         note.title.toLowerCase().includes(search))
@@ -43,10 +42,13 @@ const MainPage = () => {
     }
   }
 
+  // decide which note to render
+  const notesToRender = searchResult.length > 0 ? searchResult : notes;
+
   return (
     <>
       {/* main Conatainer */}
-      <div className='w-full h-screen flex flex-col'>
+      <div className='w-full min-h-screen flex flex-col'>
 
         {/* top menu bar */}
         <div className='flex items-center justify-between my-[20px] mx-[20px] md:mx-[50px] md:px-[50px]'>
@@ -61,13 +63,15 @@ const MainPage = () => {
               </label>
               <input onChange={(e) => searchHandler(e)} id='search' type="text" placeholder='Search..' className='pl-2 md:pl-2.5 w-[150px] md:w-[200px] focus:outline-none bg-transparent text-slate-600 opacity-60'/>
             </div>
+
+            {/* hamburger  */}
             <img src="/icons/menu.svg" alt="Menu Icon" className='w-[25px] w-[25px] md:w-[30px] md:h-[30px]'/>
         </div>
 
         <hr />
 
         {/* main body of the main page */}
-        <div className='mt-[50px] my-[20px] md:mx-[50px] px-[50px] flex flex-wrap gap-[40px]'>
+        <div className='mt-[50px] my-[20px] md:mx-[50px] mx-[25px] px-[50px] flex flex-wrap gap-[40px]'>
 
             {/* create new note */}
             <div className='flex flex-col w-[100px] h-[180px] md:w-[160px] md:h-[230px] items-center cursor-pointer group transition' onClick={() => setIsPopUp(true)}>
@@ -76,6 +80,8 @@ const MainPage = () => {
               </div>
               <p className="mt-3 text-[12px] md:text-[16px] text-center font-medium text-[#1b2559] group-hover:text-[#5E8BFF] transition">+ Create New Note</p>
             </div>
+
+            {/* popup modal */}
             <div className='relative flex items-center justify-center'> 
               {isPopUp && (
               <div className="absolute fixed inset-0 flex items-center justify-center bg-black/30 z-30">
@@ -87,19 +93,22 @@ const MainPage = () => {
               )}
             </div>
 
-            <div className='flex flex-wrap gap-[30px]'>
-              {/* display the newly created note */}
-              {notes.map(note => (
+            {/* display the newly created note */}
+            <div className='flex flex-wrap gap-[30px] justify-between md:justify-none'>
+              {notesToRender.map(note => (
               <div key={note.id} 
               className="flex flex-col w-[100px] h-[180px] md:w-[160px] md:h-[230px] items-center cursor-pointer group">
+              
               {/* Cover */}
                 {note.password === "" ?
+                
                 // unlock note
                 (<div className="relative overflow-hidden rounded-xl group-hover:shadow-xl duration-300">
                   <img src={`Cover/cover${note.cover}.png`} alt="Note Cover" 
                   className="w-full h-full object-cover rounded-xl group-hover:scale-105 transition duration-300"/>
                 </div>):
-                // locked note 
+               
+               // locked note 
                 (<div className="relative overflow-hidden rounded-xl group-hover:shadow-xl duration-300">
                   <img src={`Cover/cover${note.cover}.png`} alt="Note Cover" 
                   className="w-full h-full object-cover rounded-xl filter blur-sm brightness-90"/>
