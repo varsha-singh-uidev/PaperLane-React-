@@ -73,10 +73,12 @@ const CreateNoteModal = ({onClose, onCreate}) => {
     let noteData = {
       id : Date.now(),
       title : noteTitle,
+      content : null,
       password : (notePassword ?? ""),
       cover : selectedCover,
       createdAtDate : date,
-      createdAtTime : time
+      createdAtTime : time,
+      updatedAt : new Date()
     }
     
     setNotePassword("");
@@ -87,6 +89,7 @@ const CreateNoteModal = ({onClose, onCreate}) => {
   return (
     <>
       <div className='bg-white flex w-[500px] flex-col justify-center items-center shadow-sm rounded-xl p-6'>
+        
         {/* image with text */}
         <div className='flex flex-col items-center'>
           <img className="w-[40px] h-[40px]" src="/icons/icon.png" alt="PaperLane icon" />
@@ -121,7 +124,8 @@ const CreateNoteModal = ({onClose, onCreate}) => {
         {/* choose the note cover */}
         <div>
           <p className='text-[20px]'>Note Cover</p>
-          {/* option of different cover */}
+        
+          {/* options of different cover */}
           <ul className='flex gap-5 my-4' onClick={(e) => coverHandler(e)}>
             <li data-id="1" className={selectedCover === 1 ? "border-2 border-[#5B8CFF] rounded-md" : ""}><img src="Cover/cover1.png" alt="cover"  className='w-[45px] h-[45px] rounded-sm'/></li>
             <li data-id="2" className={selectedCover === 2 ? "border-2 border-[#5B8CFF] rounded-md" : ""}><img src="Cover/cover2.png" alt="cover" className='w-[45px] h-[45px] rounded-sm'/></li>

@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import MainPageRoute from './MainPageRoute'
 import CreateNoteModal from './CreateNoteModal';
+import Hamburger from './Hamburger';
 
 const MainPage = () => {
   const [isPopUp, setIsPopUp] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const [notes, setNotes] = useState([]);
   const [searchResult, setSearchResult] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -71,7 +73,16 @@ const MainPage = () => {
           </div>
 
           {/* hamburger menu */}
-          <img src="/icons/menu.svg" alt="Menu Icon" className='w-[25px] h-[25px] md:w-[30px] md:h-[30px]' />
+          <div className='relative'>
+            <img src="/icons/menu.svg" alt="Menu Icon" className='w-[25px] h-[25px] md:w-[30px] md:h-[30px] cursor-pointer' onClick={() => setMenuOpen(prev => !prev)}/>
+            <div>
+              {menuOpen && (
+              <div>
+                <Hamburger menuClose = {() => setMenuOpen(false)}/>
+              </div>
+              )}
+            </div>
+          </div>
         </div>
 
         <hr />
@@ -106,38 +117,44 @@ const MainPage = () => {
 
           {/* notes grid */}
           <div className='flex flex-wrap gap-[30px] justify-between md:justify-none w-full'>
+            
+            {/* when the user type in the search bar and it was not matched with any existing note */}
             {searchTerm !== "" && searchResult.length === 0 ? (
               <div className="flex flex-col items-center justify-center text-center text-gray-500 mt-10 w-full">
                 <p className="text-base font-medium">No results found</p>
                 <p className="text-sm">Try adjusting your search</p>
               </div>
-            ) : notes.length === 0 ? (
+            )
+            // when there is no note in the record 
+            : notes.length === 0 ? (
               <div className="flex flex-col items-center justify-center text-center text-gray-500 mt-10 w-full">
                 <p className="text-base font-medium">You don’t have any notes yet</p>
                 <p className="text-sm">Create your first note to get started</p>
               </div>
-            ) : (
+            )
+            //  show notes whether the (filterd notes or all notes)
+            : (
               (searchResult.length > 0 ? searchResult : notes).map(note => (
                 <div
                   key={note.id}
-                  className="flex flex-col w-[100px] h-[180px] md:w-[160px] md:h-[230px] items-center cursor-pointer group"
-                >
-                  {/* Cover */}
+                  className="flex flex-col w-[100px] h-[180px] md:w-[160px] md:h-[230px] items-center cursor-pointer group">
+                  
+                  {/* Cover / without passWord note */}
                   {note.password === "" ? (
                     <div className="relative overflow-hidden rounded-xl group-hover:shadow-xl duration-300">
                       <img
                         src={`Cover/cover${note.cover}.png`}
                         alt="Note Cover"
-                        className="w-full h-full object-cover rounded-xl group-hover:scale-105 transition duration-300"
-                      />
+                        className="w-full h-full object-cover rounded-xl group-hover:scale-105 transition duration-300"/>
                     </div>
-                  ) : (
+                  )
+                  // with passWord note 
+                  : (
                     <div className="relative overflow-hidden rounded-xl group-hover:shadow-xl duration-300">
                       <img
                         src={`Cover/cover${note.cover}.png`}
                         alt="Note Cover"
-                        className="w-full h-full object-cover rounded-xl filter blur-sm brightness-90"
-                      />
+                        className="w-full h-full object-cover rounded-xl filter blur-sm brightness-90"/>
                       <div className='absolute top-1/2 left-1/2 w-[38px] h-[38px] rounded-full bg-white flex items-center justify-center transform -translate-x-1/2 -translate-y-1/2 z-10 shadow-md'>
                         <img src="Cover/lock.png" alt="Lock Note" className="w-6 h-6" />
                       </div>
