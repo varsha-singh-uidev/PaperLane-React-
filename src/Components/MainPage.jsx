@@ -47,6 +47,12 @@ const MainPage = () => {
     }
   }
 
+  // function that is used to clear all the notes(Hamburger Menu)
+  function clearAllHandler(){
+    setNotes([]);
+    localStorage.setItem("paperlane_notes", JSON.stringify([]));
+  }
+
   return (
     <>
       {/* main container */}
@@ -78,11 +84,12 @@ const MainPage = () => {
             <div>
               {menuOpen && (
               <div>
-                <Hamburger menuClose = {() => setMenuOpen(false)}/>
+                <Hamburger clearAllHandler={clearAllHandler} menuClose = {() => setMenuOpen(false)}/>
               </div>
               )}
             </div>
           </div>
+
         </div>
 
         <hr />
