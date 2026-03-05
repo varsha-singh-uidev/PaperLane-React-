@@ -9,6 +9,7 @@ const MainPage = () => {
   const [notes, setNotes] = useState([]);
   const [searchResult, setSearchResult] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [displayNote, setDisplayNote] = useState([]); //used for the filtering of the note
 
   // run when the page mounts and extract stored notes
   useEffect(() => {
@@ -70,6 +71,24 @@ const MainPage = () => {
     localStorage.setItem("paperlane_notes", JSON.stringify(sorted));
   }
 
+  // function that filter the notes btw the lock note and unlock notes(Hameburger Menu)
+  function filterNotes(option){
+    let filterNote;
+
+    if(option === "lock"){
+      filterNote = notes.filter((note) => note.password !== "");
+    }else if(option === "unlock"){
+      filterNote = notes.filter((note) => note.password === "");
+    }
+
+    setDisplayNote(filterNote); //only update the view does not touch the orignal note array
+  }
+
+  // function that reset the filter and show all the note
+  function resetfilter(){
+    setDisplayNote([]);
+  }
+
   return (
     <>
       {/* main container */}
@@ -101,7 +120,7 @@ const MainPage = () => {
             <div>
               {menuOpen && (
               <div>
-                <Hamburger clearAllHandler={clearAllHandler} sortNote={sortNote} menuClose = {() => setMenuOpen(false)}/>
+                <Hamburger clearAllHandler={clearAllHandler} sortNote={sortNote} filterNotes={filterNotes} resetfilter={resetfilter} menuClose = {() => setMenuOpen(false)}/>
               </div>
               )}
             </div>
@@ -156,9 +175,14 @@ const MainPage = () => {
                 <p className="text-sm">Create your first note to get started</p>
               </div>
             )
-            //  show notes whether the (filterd notes or all notes)
+            //  if the user type to search note then show that if he chose the filter(lock/unlock) note show that if nothing then show all the note
             : (
-              (searchResult.length > 0 ? searchResult : notes).map(note => (
+              (searchResult.length > 0 
+                ? searchResult 
+                : displayNote.length > 0
+                  ? displayNote
+                  : notes
+              ).map(note => (
                 <div
                   key={note.id}
                   className="flex flex-col w-[100px] h-[180px] md:w-[160px] md:h-[230px] items-center cursor-pointer group">

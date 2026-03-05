@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react'
 
-const Hamburger = ({menuClose, clearAllHandler, sortNote}) => {
+const Hamburger = ({menuClose, clearAllHandler, sortNote, filterNotes, resetfilter}) => {
  
   const [clearPopUp, setClearPopUp] = useState(false);
   const [sortPopUp, setSortPopUp] = useState(false);
+  const [filterPopUp, setFilterPopUp] = useState(false);
 
   const menuRef = useRef(null);
 
@@ -31,9 +32,9 @@ const Hamburger = ({menuClose, clearAllHandler, sortNote}) => {
        <li className='px-3 py-2 hover:bg-gray-100 hover:text-blue-400 rounded' onClick={() => setClearPopUp(true)}>Clear All note</li>
        
        {/* Sort menu item with dropdown icon */}
-       <li className="flex items-center justify-between px-3 py-2 hover:bg-gray-100 hover:text-blue-400 rounded" onClick={() => setSortPopUp(prev => !prev)} >
+       <li className="flex items-center justify-between px-3 py-2 hover:bg-gray-100 hover:text-blue-400 rounded" onClick={() => setSortPopUp(prev => !prev)}>
         <span>Sort</span>
-        <img src="/icons/dropdown.svg" alt="drop" />
+        <img src="/icons/dropdown.svg" alt="Options for the sorting" />
        </li>
         {/* Sort submenu */}
         {sortPopUp && (
@@ -44,7 +45,20 @@ const Hamburger = ({menuClose, clearAllHandler, sortNote}) => {
         </ul>
         )}
 
-       <li className='px-3 py-2 hover:bg-gray-100 hover:text-blue-400 rounded'>Filter</li>
+        {/* Filter menu item with dropdown icon */}
+       <li className='flex items-center justify-between px-3 py-2 hover:bg-gray-100 hover:text-blue-400 rounded' onClick={() => setFilterPopUp(prev => !prev)}>
+        <span>Filter</span>
+        <img src="/icons/dropdown.svg" alt="options for the filter" />
+       </li>
+       {/* Filter submenu */}
+        {filterPopUp && (
+          <ul className="ml-4 font-medium">
+            <li className="px-2 py-1 text-sm text-gray-500 hover:text-blue-400 hover:bg-gray-100 rounded" onClick={() => filterNotes("lock")}>  Show Lock Notes  </li>
+            <li className="px-2 py-1 text-sm text-gray-500 hover:text-blue-400 hover:bg-gray-100 rounded" onClick={() => filterNotes("unlock")}>  Show Unlock Notes  </li>
+            <li className="px-2 py-1 text-sm text-gray-500 hover:text-blue-400 hover:bg-gray-100 rounded" onClick={resetfilter}>  Reset Filter  </li>
+          </ul>
+        )}
+
       </ul>
     </div>
 
