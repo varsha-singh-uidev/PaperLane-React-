@@ -53,6 +53,23 @@ const MainPage = () => {
     localStorage.setItem("paperlane_notes", JSON.stringify([]));
   }
 
+  // functon that sort the note according to the user choice(Hameburger Menu)
+  function sortNote(option){
+    let data = [...notes];
+    let sorted;
+
+    if(option === "title"){
+      sorted = data.sort((a, b) => a.title.localeCompare(b.title));
+    }else if(option === "createdAtDate"){
+      sorted = data.sort((a, b) => a.createdAtDate.localeCompare(b.createdAtDate));
+    }else if(option === "updatedAt"){
+      sorted = data.sort((a, b) => a.updatedAt.localeCompare(b.updatedAt));
+    }
+
+    setNotes(sorted);
+    localStorage.setItem("paperlane_notes", JSON.stringify(sorted));
+  }
+
   return (
     <>
       {/* main container */}
@@ -84,7 +101,7 @@ const MainPage = () => {
             <div>
               {menuOpen && (
               <div>
-                <Hamburger clearAllHandler={clearAllHandler} menuClose = {() => setMenuOpen(false)}/>
+                <Hamburger clearAllHandler={clearAllHandler} sortNote={sortNote} menuClose = {() => setMenuOpen(false)}/>
               </div>
               )}
             </div>

@@ -1,18 +1,53 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 
-const Hamburger = ({menuClose,clearAllHandler}) => {
+const Hamburger = ({menuClose, clearAllHandler, sortNote}) => {
+ 
   const [clearPopUp, setClearPopUp] = useState(false);
+  const [sortPopUp, setSortPopUp] = useState(false);
+
+  const menuRef = useRef(null);
+
+  // when the user click outside the menu it will close the menu
+  useEffect(() => {
+    function handleClickOutside(event){
+      if(menuRef.current && !menuRef.current.contains(event.target)){
+        menuClose();
+      }
+    }
+    
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
-    <>
-    <div className='absolute -right-5 mt-2 mr-2 w-[160px] bg-white rounded-md shadow-lg z-50'>
-      <ul className='flex flex-col gap-2 p-2 text-gray-700 cursor-pointer'>
+    <div ref={menuRef}>
+    <div className='absolute -right-5 mt-2 mr-2 w-[200px] bg-white rounded-md shadow-lg z-50'>
+      <ul className='flex flex-col gap-2 p-2 text-gray-700 cursor-pointer font-semibold'>
        <li className='px-3 py-2 hover:bg-gray-100 rounded hover:text-blue-400'>Settings</li>
        <li className='px-3 py-2 hover:bg-gray-100 hover:text-blue-400 rounded'>Export</li>
        <li className='px-3 py-2 hover:bg-gray-100 hover:text-blue-400 rounded' onClick={() => setClearPopUp(true)}>Clear All note</li>
-       <li className='px-3 py-2 hover:bg-gray-100 hover:text-blue-400 rounded'>Sort</li>
+       
+       {/* Sort menu item with dropdown icon */}
+       <li className="flex items-center justify-between px-3 py-2 hover:bg-gray-100 hover:text-blue-400 rounded" onClick={() => setSortPopUp(prev => !prev)} >
+        <span>Sort</span>
+        <img src="/icons/dropdown.svg" alt="drop" />
+       </li>
+        {/* Sort submenu */}
+        {sortPopUp && (
+        <ul className="ml-4 font-medium">
+          <li className="px-2 py-1 text-sm text-gray-500 hover:text-blue-400 hover:bg-gray-100 rounded" onClick={() => sortNote("title")}>  Sort By Title  </li>
+          <li className="px-2 py-1 text-sm text-gray-500 hover:text-blue-400 hover:bg-gray-100 rounded" onClick={() => sortNote("createdAtDate")}>  Sort By Created Date  </li>
+          <li className="px-2 py-1 text-sm text-gray-500 hover:text-blue-400 hover:bg-gray-100 rounded" onClick={() => sortNote("updatedAt")}>  Sort By Updated Date  </li>
+        </ul>
+        )}
+
        <li className='px-3 py-2 hover:bg-gray-100 hover:text-blue-400 rounded'>Filter</li>
       </ul>
     </div>
+
        {/* this popup open to take the user input related to clear All the Note  */}
         {clearPopUp && (
         <div className='fixed inset-0 flex items-center justify-center bg-black/30 z-50'>
@@ -25,7 +60,8 @@ const Hamburger = ({menuClose,clearAllHandler}) => {
         </div>
         </div>
        )}
-    </>
+
+    </div>
   )
 }
 
