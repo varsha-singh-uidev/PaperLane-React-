@@ -1,6 +1,23 @@
-import React, {useState} from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 
 const CreateNoteModal = ({onClose, onCreate}) => {
+  // 
+  const newNoteRef = useRef(null);
+
+  useEffect(() => {
+     function handleClickOutside(event){
+      if(newNoteRef.current && !newNoteRef.current.contains(event.target)){
+        onClose();
+      }
+    }
+    
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  })
+
   // create date object to get the date and time when the note is build first
   const now = new Date();
   const date = now.toLocaleDateString();
@@ -87,7 +104,7 @@ const CreateNoteModal = ({onClose, onCreate}) => {
   }
   
   return (
-    <>
+    <div ref={newNoteRef}>
       <div className='bg-white flex w-[500px] flex-col justify-center items-center shadow-sm rounded-xl p-6'>
         
         {/* image with text */}
@@ -141,7 +158,7 @@ const CreateNoteModal = ({onClose, onCreate}) => {
           <button className='bg-[#D7D7D7] text-[#6B7280] border-[#E6EEFF] rounded-sm px-3 py-1' onClick={onClose}>Cancel</button>
         </div>
       </div>
-    </>
+    </div>
   )
 }
 

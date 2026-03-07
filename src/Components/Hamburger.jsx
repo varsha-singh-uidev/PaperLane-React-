@@ -5,6 +5,7 @@ const Hamburger = ({menuClose, clearAllHandler, sortNote, filterNotes, resetfilt
   const [clearPopUp, setClearPopUp] = useState(false);
   const [sortPopUp, setSortPopUp] = useState(false);
   const [filterPopUp, setFilterPopUp] = useState(false);
+  const [settingPopUp, setSettingPopUp] = useState(false);
 
   const menuRef = useRef(null);
 
@@ -27,7 +28,32 @@ const Hamburger = ({menuClose, clearAllHandler, sortNote, filterNotes, resetfilt
     <div ref={menuRef}>
     <div className='absolute -right-5 mt-2 mr-2 w-[200px] bg-white rounded-md shadow-lg z-50'>
       <ul className='flex flex-col gap-2 p-2 text-gray-700 cursor-pointer font-semibold'>
-       <li className='px-3 py-2 hover:bg-gray-100 rounded hover:text-blue-400'>Settings</li>
+        
+        {/* Settings menu item with dropdown icon */}
+       <li className='flex items-center justify-between px-3 py-2 hover:bg-gray-100 rounded hover:text-blue-400' onClick={() => setSettingPopUp(prev => !prev)}>
+        Settings 
+       </li>
+       {/* Settings subMenu */}
+        {settingPopUp && (
+       <div className='fixed inset-0 flex items-center justify-center'>
+        <div className='flex fex-col bg-gray-500 w-[500px] h-auto p-4'>
+          <h4 className='text-white font-semibold text-[22px]'>Settings</h4>
+          <div className='  '>
+            <div>
+              <p>Preferences</p>
+              <img src="/icons/dropdown.svg" alt="" />
+            </div>
+
+          </div>
+          <div></div>
+          <div></div>
+          <div>
+            <button>Save</button>
+            <button>Cancel</button>
+          </div>
+        </div>
+       </div>
+       )}
        <li className='px-3 py-2 hover:bg-gray-100 hover:text-blue-400 rounded'>Export</li>
        <li className='px-3 py-2 hover:bg-gray-100 hover:text-blue-400 rounded' onClick={() => setClearPopUp(true)}>Clear All note</li>
        
@@ -36,7 +62,7 @@ const Hamburger = ({menuClose, clearAllHandler, sortNote, filterNotes, resetfilt
         <span>Sort</span>
         <img src="/icons/dropdown.svg" alt="Options for the sorting" />
        </li>
-        {/* Sort submenu */}
+        {/* Sort subMenu */}
         {sortPopUp && (
         <ul className="ml-4 font-medium">
           <li className="px-2 py-1 text-sm text-gray-500 hover:text-blue-400 hover:bg-gray-100 rounded" onClick={() => sortNote("title")}>  Sort By Title  </li>
@@ -50,7 +76,7 @@ const Hamburger = ({menuClose, clearAllHandler, sortNote, filterNotes, resetfilt
         <span>Filter</span>
         <img src="/icons/dropdown.svg" alt="options for the filter" />
        </li>
-       {/* Filter submenu */}
+       {/* Filter subMenu */}
         {filterPopUp && (
           <ul className="ml-4 font-medium">
             <li className="px-2 py-1 text-sm text-gray-500 hover:text-blue-400 hover:bg-gray-100 rounded" onClick={() => filterNotes("lock")}>  Show Lock Notes  </li>
