@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom';
 
 const Hamburger = ({menuClose, clearAllHandler, sortNote, filterNotes, resetfilter}) => {
  
@@ -18,6 +19,7 @@ const Hamburger = ({menuClose, clearAllHandler, sortNote, filterNotes, resetfilt
   const [resetPopUp, setResetPopUp] = useState(false); //this popup is open when the user click on the reset button
 
   const menuRef = useRef(null);
+  const navigate = useNavigate(); //used to navigate to the landingpage of the app
 
   // This function will count the total notes in the memory and also how many memory the notes used 
   function storageInfo(){
@@ -28,6 +30,13 @@ const Hamburger = ({menuClose, clearAllHandler, sortNote, filterNotes, resetfilt
     const bytes = new Blob([notesString]).size;
     const mbUsed = (bytes / (1024 * 1024)).toFixed(2);
     return [notesCount, mbUsed];
+  }
+
+  // This function is run to reset app the fully
+  function resetApp(){
+    clearAllHandler();
+    localStorage.setItem("userDetail", JSON.stringify([]));
+    navigate("/");
   }
 
   // when the user click outside the menu it will close the menu
@@ -137,7 +146,7 @@ const Hamburger = ({menuClose, clearAllHandler, sortNote, filterNotes, resetfilt
                           ))}
                         </ul>
                         )}
-                            </div>
+                      </div>
                       </div>
                     </>
                   )}
@@ -317,8 +326,8 @@ const Hamburger = ({menuClose, clearAllHandler, sortNote, filterNotes, resetfilt
           <h1 className='text-rose-600 font-semibold text-[20px]'>Reset App</h1>
           <h4 className='mt-4 mb-6 text-center text-[18px]'>This will delete all notes and restore the app to its default state. This action cannot be undone.</h4>
           <div className='flex items-center justify-between px-2'>
-            <button className='bg-red-500 rounded p-1 text-white border border-white'>Reset App</button>
-            <button className=''>Cancel</button>
+            <button className='bg-gray-600 rounded p-1 text-white border border-white hover:bg-gray-700' onClick={() => {setResetPopUp(false)}}>Cancel</button>
+            <button className='bg-red-500 rounded p-1 text-white border border-white hover:bg-red-600' onClick={resetApp}>Reset App</button>
           </div>
         </div>
       </div>

@@ -20,8 +20,8 @@ const PopupPage = () => {
     useEffect(() => {
         const data = JSON.parse(localStorage.getItem("userDetail"));
         if(!data){
-            const userDetail = 
-            { userName : "", 
+            const userDetail = { 
+              userName : "", 
               userEmail : "", 
               userPassword : "", 
               state : false,
