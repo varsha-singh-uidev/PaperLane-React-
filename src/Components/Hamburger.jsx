@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 
-const Hamburger = ({menuClose, clearAllHandler, sortNote, filterNotes, resetfilter}) => {
+const Hamburger = ({theme, setTheme, selectedSize, setSelectedSize, menuClose, clearAllHandler, sortNote, filterNotes, resetfilter}) => {
  
   const [clearPopUp, setClearPopUp] = useState(false);
   const [sortPopUp, setSortPopUp] = useState(false);
@@ -9,9 +9,9 @@ const Hamburger = ({menuClose, clearAllHandler, sortNote, filterNotes, resetfilt
   const [settingPopUp, setSettingPopUp] = useState(false); //open the setting
   const [prefeOpen, setPrefeOpen] = useState(false); //open the Preference option inside the settings
   const [themeOpen, setThemeOpen] = useState(false); //open the theme option inside the preference
-  const [selectedTheme, setSelectedTheme] = useState("Light"); //option for the theme preferences
-  const [SizeOpen, setSizeOpen] = useState(false); //open the theme option inside the preference
-  const [selectedSize, setSelectedSize] = useState("Medium"); //option for the theme preferences
+  const [tempTheme, setTempTheme] = useState(theme); //option for the theme preferences
+  const [sizeOpen, setSizeOpen] = useState(false); //open the theme option inside the preference
+  const [tempSize, setTempSize] = useState(selectedSize); // it was temp save the user preference and apply only when the user click on the save button
   const [dataTabOpen, setDataTabOpen] = useState(false); //open the data tab in the setting
   const [noteCount, setNoteCount] = useState("0"); //state for the note Count
   const [mbUsed, setMbUsed] = useState("0"); //state for the mb used by the note
@@ -20,6 +20,15 @@ const Hamburger = ({menuClose, clearAllHandler, sortNote, filterNotes, resetfilt
 
   const menuRef = useRef(null);
   const navigate = useNavigate(); //used to navigate to the landingpage of the app
+
+  // This function run when the user click on the save button of the setting
+  function saveSetting(){
+    setSettingPopUp(false); 
+    setSelectedSize(tempSize);
+    setTheme(tempTheme);
+    localStorage.setItem("fontSize", tempSize);
+    localStorage.setItem("appTheme", tempTheme);
+  }
 
   // This function will count the total notes in the memory and also how many memory the notes used 
   function storageInfo(){
@@ -34,9 +43,18 @@ const Hamburger = ({menuClose, clearAllHandler, sortNote, filterNotes, resetfilt
 
   // This function is run to reset app the fully
   function resetApp(){
-    clearAllHandler();
-    localStorage.setItem("userDetail", JSON.stringify([]));
-    navigate("/");
+
+    clearAllHandler(); //it set the paperlane_notes localStorage into the empty array
+    
+    const defaultUser = { //create a object with empty value
+      userName: "",
+      userEmail: "",
+      userPassword: "",
+      state: false
+    };
+    localStorage.setItem("userDetail", JSON.stringify(defaultUser)); //it set the userDetail localStorage to the object that has empty value
+    
+    navigate("/"); // after clearing both the localStorage navigate to the main landing page of the app 
   }
 
   // when the user click outside the menu it will close the menu
@@ -96,7 +114,7 @@ const Hamburger = ({menuClose, clearAllHandler, sortNote, filterNotes, resetfilt
                           {/* Theme option show */}
                           <div className="flex items-center justify-between"
                             onClick={() => setThemeOpen((prev) => !prev)}>
-                            <p className="text-white">{selectedTheme}</p>
+                            <p className="text-white">{tempTheme}</p>
                             <img src="/icons/dropdown.svg" alt="" />
                           </div>
 
@@ -106,9 +124,9 @@ const Hamburger = ({menuClose, clearAllHandler, sortNote, filterNotes, resetfilt
                               {["Light", "Dark"].map((option) => (
                                 <li
                                   key={option}
-                                  className={`px-2 py-1 rounded cursor-pointer  ${ selectedTheme === option ? "bg-blue-100 text-blue-600 font-semibold"  : "hover:bg-gray-500 text-white"  }`}
+                                  className={`px-2 py-1 rounded cursor-pointer  ${ tempTheme === option ? "bg-blue-100 text-blue-600 font-semibold"  : "hover:bg-gray-500 text-white"  }`}
                                   onClick={() => {
-                                    setSelectedTheme(option); // update selection
+                                    setTempTheme(option); // update selection
                                     setThemeOpen(false); // close dropdown
                                   }}>
                                   {option}
@@ -127,18 +145,18 @@ const Hamburger = ({menuClose, clearAllHandler, sortNote, filterNotes, resetfilt
 
                       {/* Font Size option show */}
                       <div className="flex items-center justify-between" onClick={() => setSizeOpen((prev) => !prev)}>
-                        <p className="text-white">{selectedSize}</p>
+                        <p className="text-white">{tempSize}</p>
                         <img src="/icons/dropdown.svg" alt="dropdown of the font size option" />
                       </div>
 
                       {/* Dropdown options inside the FontSize */}
-                      {SizeOpen && (
+                      {sizeOpen && (
                       <ul className="mt-2 bg-gray-600 rounded-md">
                         {["Small", "Medium",  "Large"].map((option) => (
                          <li key={option}
-                          className={`px-2 py-1 rounded cursor-pointer  ${ selectedSize === option ? "bg-blue-100 text-blue-600 font-semibold"  : "hover:bg-gray-500 text-white"  }`}
+                          className={`px-2 py-1 rounded cursor-pointer  ${ tempSize === option ? "bg-blue-100 text-blue-600 font-semibold"  : "hover:bg-gray-500 text-white"  }`}
                           onClick={() => {
-                          setSelectedSize(option); // update selection
+                          setTempSize(option); // update selection
                           setSizeOpen(false); // close dropdown
                           }}>
                             {option}
@@ -198,7 +216,7 @@ const Hamburger = ({menuClose, clearAllHandler, sortNote, filterNotes, resetfilt
 
                 {/* Button of the setting */}
                 <div className="flex justify-end gap-2 mt-4">
-                  <button className="bg-blue-500 text-white px-3 py-1 rounded" onClick={() => setSettingPopUp(false)}>
+                  <button className="bg-blue-500 text-white px-3 py-1 rounded" onClick={saveSetting}>
                     Save
                   </button>
                   <button className="bg-gray-500 text-white px-3 py-1 rounded" onClick={() => setSettingPopUp(false)}>

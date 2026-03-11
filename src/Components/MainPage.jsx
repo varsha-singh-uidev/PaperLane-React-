@@ -10,6 +10,18 @@ const MainPage = () => {
   const [searchResult, setSearchResult] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [displayNote, setDisplayNote] = useState([]); //used for the filtering of the note
+  const [selectedSize, setSelectedSize] = useState(localStorage.getItem("fontSize")|| "Medium"); //used in the hameburger menu to change the fontSize of the title and date 
+  const [theme, setTheme] = useState(localStorage.getItem("appTheme") || "Light") 
+
+  // this function gave the class according to the userPrefeernce of fontSize in the hameburder menu
+  function getFontSizeClass(size){
+    switch(size){
+      case "Small": return "text-sm";
+      case "Medium": return "text-base";
+      case "Large": return "text-lg";
+      default: return "text-base";
+    }
+  }
 
   // run when the page mounts and extract stored notes
   useEffect(() => {
@@ -101,7 +113,7 @@ const MainPage = () => {
           <MainPageRoute />
 
           {/* search bar */}
-          <div className='flex w-[200px] md:w-[270px] px-1.5 border border-[#5B8CFF] py-1 rounded-md bg-[#F2F4F8]'>
+          <div className={`flex w-[200px] md:w-[270px] px-1.5 border border-[#5B8CFF] py-1 rounded-md ${theme === "Light" ? "bg-[#F2F4F8]" : "bg-[#1E1E2F]"}`}>
             <label htmlFor="search" className='flex items-center'>
               <img src="/icons/search.svg" alt="search Icon" className='w-[16px] h-[16px]' />
             </label>
@@ -120,7 +132,7 @@ const MainPage = () => {
             <div>
               {menuOpen && (
               <div>
-                <Hamburger clearAllHandler={clearAllHandler} sortNote={sortNote} filterNotes={filterNotes} resetfilter={resetfilter} menuClose = {() => setMenuOpen(false)}/>
+                <Hamburger theme={theme} setTheme={setTheme} selectedSize={selectedSize} setSelectedSize={setSelectedSize} clearAllHandler={clearAllHandler} sortNote={sortNote} filterNotes={filterNotes} resetfilter={resetfilter} menuClose = {() => setMenuOpen(false)}/>
               </div>
               )}
             </div>
@@ -141,7 +153,7 @@ const MainPage = () => {
             <div className="overflow-hidden rounded-2xl shadow-md group-hover:shadow-xl group-hover:-translate-y-1.5 transition duration-300">
               <img src="/Cover/cover1.png" alt="Create Note" className="rounded-2xl group-hover:scale-105 transition duration-300" />
             </div>
-            <p className="mt-3 text-[12px] md:text-[16px] text-center font-medium text-[#1b2559] group-hover:text-[#5E8BFF] transition">
+            <p className={`mt-3 ${getFontSizeClass(selectedSize)} text-center font-medium ${theme === "Light" ? "text-[#1b2559] group-hover:text-[#5E8BFF] " : "text-[#EAEAEA] group-hover:text-[#FF6FB5]"} transition`}>
               + Create New Note
             </p>
           </div>
@@ -210,12 +222,12 @@ const MainPage = () => {
                   )}
 
                   {/* Title */}
-                  <p className="mt-3 text-base font-semibold text-[#1b2559] text-center group-hover:text-[#5E8BFF] transition">
+                  <p className={`mt-3 ${getFontSizeClass(selectedSize)} font-semibold ${theme === "Light" ? "text-[#1b2559] group-hover:text-[#5E8BFF] " : "text-[#EAEAEA] group-hover:text-[#FF6FB5]"} text-center transition`}>
                     {note.title}
                   </p>
 
                   {/* Date */}
-                  <p className="text-xs text-gray-500">{note.createdAtDate}</p>
+                  <p className={`${getFontSizeClass(selectedSize)} text-gray-500`}>{note.createdAtDate}</p>
                 </div>
               ))
             )}
