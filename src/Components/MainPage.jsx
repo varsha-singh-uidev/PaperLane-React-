@@ -104,7 +104,7 @@ const MainPage = () => {
   return (
     <>
       {/* main container */}
-      <div className='w-full min-h-screen flex flex-col'>
+      <div className={`w-full min-h-screen flex flex-col ${theme === "Light" ? "bg-white" : "bg-[#12121A]"}`}>
 
         {/* top menu bar */}
         <div className='flex items-center justify-between my-[20px] mx-[20px] md:mx-[50px] md:px-[50px]'>
@@ -122,7 +122,7 @@ const MainPage = () => {
               id='search'
               type="text"
               placeholder='Search..'
-              className='pl-2 md:pl-2.5 w-[150px] md:w-[200px] focus:outline-none bg-transparent text-slate-600 opacity-60'
+              className={`pl-2 md:pl-2.5 w-[150px] md:w-[200px] focus:outline-none bg-transparent ${theme === "Light" ? "text-slate-600 placeholder-slate-400" : "text-gray-200 placeholder-gray-400"}`}
             />
           </div>
 
@@ -140,14 +140,14 @@ const MainPage = () => {
 
         </div>
 
-        <hr />
+        <hr className={`${theme === "Light" ? "border-gray-200" : "border-[#2A2A3B]"}`}/>
 
         {/* main body */}
         <div className='mt-[50px] my-[20px] md:mx-[50px] mx-[25px] px-[50px] flex flex-wrap gap-[40px]'>
 
           {/* create new note */}
           <div
-            className='flex flex-col w-[100px] h-[180px] md:w-[160px] md:h-[230px] items-center cursor-pointer group transition'
+            className={`flex flex-col w-[100px] h-[180px] md:w-[160px] md:h-[230px] items-center cursor-pointer group transition ${theme === "Dark" ? "bg-[#21212b] p-2 rounded-xl" : ""}`}
             onClick={() => setIsPopUp(true)}
           >
             <div className="overflow-hidden rounded-2xl shadow-md group-hover:shadow-xl group-hover:-translate-y-1.5 transition duration-300">
@@ -161,7 +161,7 @@ const MainPage = () => {
           {/* popup modal */}
           <div className='relative flex items-center justify-center'>
             {isPopUp && (
-              <div className="absolute fixed inset-0 flex items-center justify-center bg-black/30 z-30">
+              <div className="absolute fixed inset-0 flex items-center justify-center bg-black/50 z-30">
                 <CreateNoteModal
                   onClose={() => setIsPopUp(false)}
                   onCreate={handler}
@@ -175,7 +175,7 @@ const MainPage = () => {
             
             {/* when the user type in the search bar and it was not matched with any existing note */}
             {searchTerm !== "" && searchResult.length === 0 ? (
-              <div className="flex flex-col items-center justify-center text-center text-gray-500 mt-10 w-full">
+              <div className={`flex flex-col items-center justify-center text-center mt-10 w-full ${theme === "Light" ? "text-gray-500" : "text-gray-400"}`}>
                 <p className="text-base font-medium">No results found</p>
                 <p className="text-sm">Try adjusting your search</p>
               </div>
@@ -227,7 +227,7 @@ const MainPage = () => {
                   </p>
 
                   {/* Date */}
-                  <p className={`${getFontSizeClass(selectedSize)} text-gray-500`}>{note.createdAtDate}</p>
+                  <p className={`${getFontSizeClass(selectedSize)} ${theme === "Light" ? "text-gray-500" : "text-gray-400"}`}>{note.createdAtDate}</p>
                 </div>
               ))
             )}
