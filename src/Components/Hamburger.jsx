@@ -53,6 +53,9 @@ const Hamburger = ({theme, setTheme, selectedSize, setSelectedSize, menuClose, c
       state: false
     };
     localStorage.setItem("userDetail", JSON.stringify(defaultUser)); //it set the userDetail localStorage to the object that has empty value
+
+    localStorage.setItem("fontSize", "Medium");
+    localStorage.setItem("appTheme", "Light");
     
     navigate("/"); // after clearing both the localStorage navigate to the main landing page of the app 
   }
@@ -77,19 +80,18 @@ const Hamburger = ({theme, setTheme, selectedSize, setSelectedSize, menuClose, c
 
   return (
     <div ref={menuRef}>
-      <div className="absolute -right-5 mt-2 mr-2 w-[200px] bg-white rounded-md shadow-lg z-50">
-        <ul className="flex flex-col gap-2 p-2 text-gray-700 cursor-pointer font-semibold">
+      <div className={`absolute -right-5 mt-2 mr-2 w-[200px] rounded-md shadow-lg z-50 ${theme === "Light" ? "bg-white" : "bg-[#1F1F2E]"}`}>
+        <ul className={`flex flex-col gap-2 p-2 cursor-pointer font-semibold ${theme === "Light" ? "text-gray-700" : "text-gray-200"}`}>
+          
           {/* Settings menu item with dropdown icon */}
-          <li
-            className="flex items-center justify-between px-3 py-2 hover:bg-gray-100 rounded hover:text-blue-400"
-            onClick={() => setSettingPopUp(true)}
-          >
+          <li className="flex items-center justify-between px-3 py-2 hover:bg-gray-100/30 rounded hover:text-blue-400" onClick={() => setSettingPopUp(true)}>
             Settings
           </li>
+
           {/* Settings subMenu */}
           {settingPopUp && (
             <div className="fixed inset-0 flex items-center justify-center">
-              <div className="flex flex-col bg-gray-600 w-[500px] h-auto p-4">
+              <div className="flex flex-col bg-gray-600 w-[500px] h-auto py-5 px-6 rounded-xl">
                 <h4 className="text-white font-semibold text-[22px] mb-4">
                   Settings
                 </h4>
@@ -105,6 +107,7 @@ const Hamburger = ({theme, setTheme, selectedSize, setSelectedSize, menuClose, c
                   {/* Sub options of the prefernce Tab */}
                   {prefeOpen && (
                     <>
+                    
                     {/* Theme Row */}
                       <hr className="my-3 border-white/20 w-full" />
                       <div className="flex items-center justify-between px-4">
@@ -181,6 +184,7 @@ const Hamburger = ({theme, setTheme, selectedSize, setSelectedSize, menuClose, c
                 {/* Sub option of the dataTab */}
                 {dataTabOpen && (
                   <>
+                  
                   {/* Storage info row */}
                   <hr className="my-3 border-white/20 w-full" />
                   <div className="px-4">
@@ -214,8 +218,8 @@ const Hamburger = ({theme, setTheme, selectedSize, setSelectedSize, menuClose, c
                 )}
                 </div>
 
-                {/* Button of the setting */}
-                <div className="flex justify-end gap-2 mt-4">
+                {/* Button of the settings option */}
+                <div className="flex justify-end gap-4 mt-4">
                   <button className="bg-blue-500 text-white px-3 py-1 rounded" onClick={saveSetting}>
                     Save
                   </button>
@@ -227,16 +231,17 @@ const Hamburger = ({theme, setTheme, selectedSize, setSelectedSize, menuClose, c
             </div>
           )}
 
-          <li className="px-3 py-2 hover:bg-gray-100 hover:text-blue-400 rounded">
+          <li className="px-3 py-2 hover:bg-gray-100/30 hover:text-blue-400 rounded">
             Export
           </li>
 
           <li
-            className="px-3 py-2 hover:bg-gray-100 hover:text-blue-400 rounded"
+            className="px-3 py-2 hover:bg-gray-100/30 hover:text-blue-400 rounded"
             onClick={() => setClearPopUp(true)}
           >
             Clear All note
           </li>
+         
           {/* this popup open to take the user input related to clear All the Note  */}
           {clearPopUp && (
             <div className="fixed inset-0 flex items-center justify-center bg-black/30 z-50">
@@ -268,31 +273,32 @@ const Hamburger = ({theme, setTheme, selectedSize, setSelectedSize, menuClose, c
 
           {/* Sort menu item with dropdown icon */}
           <li
-            className="flex items-center justify-between px-3 py-2 hover:bg-gray-100 hover:text-blue-400 rounded"
+            className="flex items-center justify-between px-3 py-2 hover:bg-gray-100/30 hover:text-blue-400 rounded"
             onClick={() => setSortPopUp((prev) => !prev)}
           >
             <span>Sort</span>
-            <img src="/icons/dropdown.svg" alt="Options for the sorting" />
+            <img src={`${theme === "Light" ? "/icons/dropdown.svg" : "/icons(W)/dropdown(W).svg"}`} alt="Options for the sorting"  className='w-[14px] h-auto'/>
           </li>
+         
           {/* Sort subMenu */}
           {sortPopUp && (
             <ul className="ml-4 font-medium">
               <li
-                className="px-2 py-1 text-sm text-gray-500 hover:text-blue-400 hover:bg-gray-100 rounded"
+                className="px-2 py-1 text-sm text-gray-500 hover:text-blue-400 hover:bg-gray-100/30 rounded"
                 onClick={() => sortNote("title")}
               >
                 {" "}
                 Sort By Title{" "}
               </li>
               <li
-                className="px-2 py-1 text-sm text-gray-500 hover:text-blue-400 hover:bg-gray-100 rounded"
+                className="px-2 py-1 text-sm text-gray-500 hover:text-blue-400 hover:bg-gray-100/30 rounded"
                 onClick={() => sortNote("createdAtDate")}
               >
                 {" "}
                 Sort By Created Date{" "}
               </li>
               <li
-                className="px-2 py-1 text-sm text-gray-500 hover:text-blue-400 hover:bg-gray-100 rounded"
+                className="px-2 py-1 text-sm text-gray-500 hover:text-blue-400 hover:bg-gray-100/30 rounded"
                 onClick={() => sortNote("updatedAt")}
               >
                 {" "}
@@ -303,31 +309,32 @@ const Hamburger = ({theme, setTheme, selectedSize, setSelectedSize, menuClose, c
 
           {/* Filter menu item with dropdown icon */}
           <li
-            className="flex items-center justify-between px-3 py-2 hover:bg-gray-100 hover:text-blue-400 rounded"
+            className="flex items-center justify-between px-3 py-2 hover:bg-gray-100/30 hover:text-blue-400 rounded"
             onClick={() => setFilterPopUp((prev) => !prev)}
           >
             <span>Filter</span>
-            <img src="/icons/dropdown.svg" alt="options for the filter" />
+            <img src={`${theme === "Light" ? "/icons/dropdown.svg" : "/icons(W)/dropdown(W).svg"}`} alt="options for the filter"  className='w-[14px] h-auto'/>
           </li>
+         
           {/* Filter subMenu */}
           {filterPopUp && (
             <ul className="ml-4 font-medium">
               <li
-                className="px-2 py-1 text-sm text-gray-500 hover:text-blue-400 hover:bg-gray-100 rounded"
+                className="px-2 py-1 text-sm text-gray-500 hover:text-blue-400 hover:bg-gray-100/30 rounded"
                 onClick={() => filterNotes("lock")}
               >
                 {" "}
                 Show Lock Notes{" "}
               </li>
               <li
-                className="px-2 py-1 text-sm text-gray-500 hover:text-blue-400 hover:bg-gray-100 rounded"
+                className="px-2 py-1 text-sm text-gray-500 hover:text-blue-400 hover:bg-gray-100/30 rounded"
                 onClick={() => filterNotes("unlock")}
               >
                 {" "}
                 Show Unlock Notes{" "}
               </li>
               <li
-                className="px-2 py-1 text-sm text-gray-500 hover:text-blue-400 hover:bg-gray-100 rounded"
+                className="px-2 py-1 text-sm text-gray-500 hover:text-blue-400 hover:bg-gray-100/30 rounded"
                 onClick={resetfilter}
               >
                 {" "}
@@ -337,6 +344,7 @@ const Hamburger = ({theme, setTheme, selectedSize, setSelectedSize, menuClose, c
           )}
         </ul>
       </div>
+    
       {/* reset popup */}
       {resetPopUp && (
       <div className='fixed inset-0 flex justify-center items-center z-50'>

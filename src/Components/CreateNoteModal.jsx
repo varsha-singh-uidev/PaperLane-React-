@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react'
 
-const CreateNoteModal = ({onClose, onCreate}) => {
+const CreateNoteModal = ({theme, onClose, onCreate}) => {
   // 
   const newNoteRef = useRef(null);
 
@@ -105,42 +105,45 @@ const CreateNoteModal = ({onClose, onCreate}) => {
   
   return (
     <div ref={newNoteRef}>
-      <div className='bg-white flex w-[500px] flex-col justify-center items-center shadow-sm rounded-xl p-6'>
+      <div className={`flex w-[500px] flex-col justify-center items-center shadow-sm rounded-xl p-6 ${theme === "Light" ? "bg-white" : "bg-[#1F1F2E]"}`}>
         
         {/* image with text */}
         <div className='flex flex-col items-center'>
-          <img className="w-[40px] h-[40px]" src="/icons/icon.png" alt="PaperLane icon" />
-          <h1 className='text-[22px] font-semibold text-[#1b2559]'>Create Note</h1>
+          <img 
+          className="w-[40px] h-[40px]" 
+          src={`${theme === "Light" ? "/icons/icon.png" : "/icons(W)/icon(W).svg"}`} 
+          alt="PaperLane icon" />
+          <h1 className={`text-[22px] font-semibold ${theme === "Light" ? "text-[#1b2559]" : "text-white"}`}>Create Note</h1>
         </div>
 
         {/* take the note title and password(optional) input from the user */}
         <div className='flex flex-col my-6 '> 
-          <label htmlFor="title" className='text-sm pl-1.5 text-gray-700'>Note Title</label> 
+          <label htmlFor="title" className={`text-sm pl-1.5 ${theme === "Light" ? "text-gray-700" : "text-gray-300"}`}>Note Title</label> 
           <input 
           id='title'
           type="text"
           value={noteTitle}
           onChange={(e) => {handlerTitle(e)}} 
           placeholder='First note' 
-          className='bg-[#F2F4F8] w-[250px] rounded-sm px-2.5 py-1 border border-[#5B8CFF] text-[#111827] placeholder:text-[#9CA3AF] placeholder:text-sm focus:outline-none'
+          className={`w-[250px] rounded-sm px-2.5 py-1 border border-[#5B8CFF] placeholder:text-sm focus:outline-none ${theme === "Light" ? "bg-[#F2F4F8] text-[#111827] placeholder:text-[#9CA3AF]" : "bg-[#2A2A3B text-white placeholder:text-gray-400]"}`}
           />
           <span className={`${noteError !== "" ? "pl-1.5 text-sm text-red-500 mt-1.5" : ""}`}>{noteError}</span>
 
-          <label htmlFor="password" className='text-sm pl-1.5 text-gray-700 mt-5'>Password (Optional)</label> 
+          <label htmlFor="password" className={`text-sm pl-1.5 mt-5 ${theme === "Light" ? "text-gray-700" : "text-gray-300"}`}>Password (Optional)</label> 
           <input 
           id='password'
           type="password" 
           value={notePassword}
           onChange={(e) => {handlerPassword(e)}}
           placeholder='******' 
-          className='bg-[#F2F4F8] w-[250px] rounded-sm px-2.5 py-1 border border-[#5B8CFF] text-[#111827] placeholder:text-[#9CA3AF] focus:outline-none'
+          className={`w-[250px] rounded-sm px-2.5 py-1 border border-[#5B8CFF] placeholder:text-sm focus:outline-none ${theme === "Light" ? "bg-[#F2F4F8] text-[#111827] placeholder:text-[#9CA3AF]" : "bg-[#2A2A3B text-white placeholder:text-gray-400]"}`}
           />
           <span className={`${passwordError !== "" ? "pl-1.5 text-sm text-red-500 mt-1.5 w-[250px]" : ""}`}>{passwordError}</span>
         </div>
 
         {/* choose the note cover */}
         <div>
-          <p className='text-[20px]'>Note Cover</p>
+          <p className={`text-[20px] ${theme === "Light" ? "text-black" : "text-white"}`}>Note Cover</p>
         
           {/* options of different cover */}
           <ul className='flex gap-5 my-4' onClick={(e) => coverHandler(e)}>
