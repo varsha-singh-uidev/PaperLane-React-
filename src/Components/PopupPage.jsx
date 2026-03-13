@@ -146,10 +146,11 @@ const PopupPage = () => {
           <form 
             className='flex flex-col justify-center items-center w-[400px] rounded-3xl bg-white shadow-[0_20px_60px_rgba(0,0,0,0.12)] backdrop-blur-xl p-[40px] gap-[40px]'
             onSubmit={(e) => handler(e)}>
+            
             {/* image with text */}
             <div className='flex flex-col items-center'>
-                <img className="w-[40px] h-[40px]" src="/icons/icon.png" alt="PaperLane icon" />
-                <h1 className='text-[22px] font-semibold text-[#1b2559]'>Create Your Space</h1>
+              <img className="w-[40px] h-[40px]" src="/icons/icon.png" alt="PaperLane icon" />
+              <h1 className='text-[22px] font-semibold text-[#1b2559]'>Create Your Space</h1>
             </div>
 
             {/* input fields */}

@@ -3,6 +3,7 @@ import MainPageRoute from './MainPageRoute'
 import CreateNoteModal from './CreateNoteModal';
 import Hamburger from './Hamburger';
 import { useNavigate } from 'react-router-dom';
+import NotePassword from './NotePassword';
 
 const MainPage = () => {
   const [isPopUp, setIsPopUp] = useState(false);
@@ -15,16 +16,18 @@ const MainPage = () => {
   const [theme, setTheme] = useState(localStorage.getItem("appTheme") || "Light") 
 
   // 
+  const [passwordNote, setPasswordNote] = useState(null);
+
+  // 
   const navigate = useNavigate();
+  
   // 
   function Click(note){
-    console.log("Hello");
-    let data = note.password;
-    if(data === ""){
+    if(note.password === ""){
       navigate("/noteviewer");
     }
     else{
-      navigate("/notepassword");
+      setPasswordNote(note);
     }
   }
 
@@ -143,7 +146,7 @@ const MainPage = () => {
 
           {/* hamburger menu */}
           <div className='relative'>
-            <img src={`${theme === "Light" ? "/icons/menu.svg" : "/icons(W)/menu(W).svg"}`} alt="Menu Icon" className='w-[25px] h-[25px] md:w-[30px] md:h-[30px] cursor-pointer' onClick={() => setMenuOpen(prev => !prev)}/>
+            <img src={`${theme === "Light" ? "/icons/menu.svg" : "/icons(W)/menu(W).png"}`} alt="Menu Icon" className='w-[25px] h-[25px] md:w-[30px] md:h-[30px] cursor-pointer' onClick={() => setMenuOpen(prev => !prev)}/>
             <div>
               {menuOpen && (
               <div>
@@ -253,6 +256,13 @@ const MainPage = () => {
           </div>
         </div>
       </div>
+
+      {/*  */}
+      {passwordNote && (
+        <div className='fixed inset-0 flex items-center justify-center bg-black/50 z-50'> 
+          <NotePassword passwordNote={passwordNote} onClose={() => setPasswordNote(null)} theme={theme}/>
+        </div>
+      )}
     </>
   )
 }
