@@ -15,16 +15,16 @@ const MainPage = () => {
   const [selectedSize, setSelectedSize] = useState(localStorage.getItem("fontSize")|| "Medium"); //used in the hameburger menu to change the fontSize of the title and date 
   const [theme, setTheme] = useState(localStorage.getItem("appTheme") || "Light") 
 
-  // 
+  // state that hold the current note object
   const [passwordNote, setPasswordNote] = useState(null);
 
-  // 
+  // use to navigate to the noteViewer
   const navigate = useNavigate();
   
-  // 
+  // function that click on the note click
   function Click(note){
     if(note.password === ""){
-      navigate("/noteviewer");
+      navigate("/noteviewer", {state : {note}});
     }
     else{
       setPasswordNote(note);
@@ -158,7 +158,7 @@ const MainPage = () => {
 
         </div>
 
-        <hr className={`${theme === "Light" ? "border-gray-200" : "border-[#2A2A3B]"}`}/>
+        <hr className={`${theme === "Light" ? "border-gray-300" : "border-[#2A2A3B]"}`}/>
 
         {/* main body */}
         <div className='mt-[50px] my-[20px] md:mx-[50px] mx-[25px] px-[50px] flex flex-wrap gap-[40px]'>
@@ -257,7 +257,7 @@ const MainPage = () => {
         </div>
       </div>
 
-      {/*  */}
+      {/* if the state contain note then it open the notePassword popup */}
       {passwordNote && (
         <div className='fixed inset-0 flex items-center justify-center bg-black/50 z-50'> 
           <NotePassword passwordNote={passwordNote} onClose={() => setPasswordNote(null)} theme={theme}/>
