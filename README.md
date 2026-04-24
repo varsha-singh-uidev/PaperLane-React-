@@ -14,11 +14,11 @@ The app focuses on simplicity while still providing essential features like note
 * LocalStorage-based persistence (no backend required)
 * Reset app functionality
 
-##🧠 Tech Stack
+## 🧠 Tech Stack
 * React (Functional Components + Hooks)
 * React Router
 * Tailwind CSS
 * LocalStorage (for state persistence)
 
-##🎯 Purpose
+## 🎯 Purpose
 This project was built to strengthen frontend fundamentals, including state management, component architecture, and UI/UX design, while implementing real-world features like theming, filtering, and data persistence.
