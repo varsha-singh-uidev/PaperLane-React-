@@ -9,6 +9,9 @@ const NoteViewer = () => {
   
   // state for the theme of the app
   const [theme, setTheme] = useState("Light");
+
+  // add the state to show the test of start writting
+  const [content, setContent] = useState("");
   
   // get the theme when the page mounts from the localStorage
   useEffect(() => {
@@ -58,60 +61,94 @@ const NoteViewer = () => {
         <div
         contentEditable
         suppressContentEditableWarning={true}
-        className={`outline-none w-full min-h-[50vh] text-[16px] leading-7
+        onInput={(e) => setContent(e.currentTarget.innerText)}
+        className={`outline-none w-full min-h-[50vh] text-[16px] leading-7 relative
         ${theme === "Light" ? "bg-white text-black" : "bg-[#12121A] text-gray-200"}`}
-        placeholder="Start writing..."
         >
+        {content === "" && (
+          <span className="absolute top-0 left-0 text-gray-400 pointer-events-none">
+            Start Writting...
+          </span>
+        )}
         </div>
+      </div>     
+
+    {/* action bar */}
+    <div className="fixed bottom-5 left-1/2 -translate-x-1/2 w-[95%] md:w-[900px] z-50">
+    <div className={`rounded-2xl px-6 py-4 flex items-center justify-between shadow-lg backdrop-blur-md
+    ${theme === "Light"  ? "bg-white/90 border border-gray-200"  : "bg-[#1A1A2B]/90 border border-[#2A2A3B]"  }`}  >
+
+    {/* reusable button style */}
+    {/** size is the key fix */}
+    
+    {/* TEXT STYLE */}
+    <div className="flex items-center gap-3">
+      <button className="p-2 rounded-md hover:bg-gray-200 dark:hover:bg-[#2A2A3B] transition">
+        <img className="h-[18px]" src={`${theme === "Light" ? "/homePage/bold.svg" : "/homePage/bold(W).svg"}`} />
+      </button>
+      <button className="p-2 rounded-md hover:bg-gray-200 dark:hover:bg-[#2A2A3B] transition">
+        <img className="h-[22px]" src={`${theme === "Light" ? "/homePage/italic.svg" : "/homePage/italic(W).svg"}`} />
+      </button>
+      <button className="p-2 rounded-md hover:bg-gray-200 dark:hover:bg-[#2A2A3B] transition">
+        <img className="h-[22px]" src={`${theme === "Light" ? "/homePage/underLine.svg" : "/homePage/underLine(W).svg"}`} />
+      </button>
+    </div>
+
+    <div className="h-6 w-[1px] bg-gray-300 dark:bg-[#2A2A3B]" />
+
+    {/* FONT CONTROLS */}
+    <div className="flex items-center gap-3">
+      <div className="flex items-center rounded-lg border border-gray-300 dark:border-[#2A2A3B] overflow-hidden">
+        <button className="px-3 py-1 text-sm">Aa</button>
+        <button className="px-2">
+          <img src="/icons/dropdown.svg" className="w-3" />
+        </button>
       </div>
 
-      {/* action bar */}
-      <div className={`fixed bottom-5 left-1/2 -translate-x-1/2 w-[80%] md:w-[850px] z-50`}>
-        <div className={`rounded-xl py-4 px-6 flex items-center justify-between ${theme === "Light" ? "bg-gray-200" : "bg-[#2A2A3B]"}`}>
-
-          {/* left side tool bold itlaic underline */}
-          <div className='flex w-[120px] items-center justify-between'>
-            <button><img className='h-[25px]' src={`${theme === "Light" ? "/homePage/bold.svg" : "/homePage/bold(W).svg"}`} alt="bold icon" /></button>
-            <button><img className='h-[33px]' src={`${theme === "Light" ? "/homePage/italic.svg" : "/homePage/italic(W).svg"}`} alt="italic icon" /></button>
-            <button><img className='h-[32px]' src={`${theme === "Light" ? "/homePage/underLine.svg" : "/homePage/underLine(W).svg"}`} alt="underline icon" /></button>
-          </div>
-
-          {/* transformation of letter */}
-          <div className='flex gap-[0.85px]'>
-            <button className='w-[35px] h-[30px] flex items-center px-1 rounded-bl-sm rounded-tl-sm bg-[#ECECEC]'><img className='w-[25px]' src="/homePage/changeLetter.svg" alt="" /></button>
-            <button className='w-[20px] h-[30px] flex items-center px-1 rounded-br-sm rounded-tr-sm bg-[#ECECEC]'><img src="/icons/dropdown.svg" alt="dropdown for the text transformation" /></button>
-          </div>
-
-          {/* transformation of font size */}
-          <div className='flex gap-[0.85px]'>
-            <button className='w-[35px] h-[30px] flex items-center px-1 rounded-bl-sm rounded-tl-sm bg-[#ECECEC] font-bold text-[20px] text-black/85'>18</button>
-            <button className='w-[20px] h-[30px] flex items-center px-1 rounded-br-sm rounded-tr-sm bg-[#ECECEC]'><img src="/icons/dropdown.svg" alt="Drop down option for the text fontSize" /></button>
-          </div>
-
-          {/* transformation of text Color */}
-          <div>
-            <button className='w-[35px] h-[30px] flex items-center justify-center rounded-sm bg-[#ECECEC]'><img className='h-[25px]' src="/homePage/textColor.png" alt="text Color Change Icon" /></button>
-          </div>
-
-          {/* transformation of text highlight */}
-          <div>
-            <button className='w-[35px] h-[30px] flex items-center justify-center rounded-sm bg-[#ECECEC]'><img className='h-[25px]' src="/homePage/highlight.svg" alt="Highlighter Icon" /></button>
-          </div>
-
-          {/* transformation of formatting points */}
-          <div className='flex gap-[0.85px]'>
-            <button className='w-[35px] h-[30px] flex items-center px-1 rounded-bl-sm rounded-tl-sm bg-[#ECECEC]'><img className='w-[25px]' src="/homePage/point1.svg" alt="" /></button>
-            <button className='w-[20px] h-[30px] flex items-center px-1 rounded-br-sm rounded-tr-sm bg-[#ECECEC]'><img src="/icons/dropdown.svg" alt="dropdown for the text transformation" /></button>
-          </div>
-
-           {/* transformation of formatting numeric and alphabetic */}
-          <div className='flex gap-[0.85px]'>
-            <button className='w-[35px] h-[30px] flex items-center px-1 rounded-bl-sm rounded-tl-sm bg-[#ECECEC]'><img className='' src="/homePage/nopoint1.svg" alt="" /></button>
-            <button className='w-[20px] h-[30px] flex items-center px-1 rounded-br-sm rounded-tr-sm bg-[#ECECEC]'><img src="/icons/dropdown.svg" alt="dropdown for the text transformation" /></button>
-          </div>
-
-        </div>
+      <div className="flex items-center rounded-lg border border-gray-300 dark:border-[#2A2A3B] overflow-hidden">
+        <button className="px-3 py-1 text-sm font-semibold">18</button>
+        <button className="px-2">
+          <img src="/icons/dropdown.svg" className="w-3" />
+        </button>
       </div>
+    </div>
+
+    <div className="h-6 w-[1px] bg-gray-300 dark:bg-[#2A2A3B]" />
+
+    {/* COLOR */}
+    <div className="flex items-center gap-2">
+      <button className="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-200 dark:hover:bg-[#2A2A3B]">
+        <img src="/homePage/textColor.png" className="w-5 h-5 object-contain" />
+      </button>
+      <button className="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-200 dark:hover:bg-[#2A2A3B]">
+        <img src="/homePage/highlight.svg" className="w-5 h-5 object-contain" />
+      </button>
+    </div>
+
+    <div className="h-6 w-[1px] bg-gray-300 dark:bg-[#2A2A3B]" />
+
+    {/* LIST */}
+    <div className="flex items-center gap-2">
+      <button className="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-200 dark:hover:bg-[#2A2A3B]">
+        <img src="/homePage/point1.svg" className="w-5 h-5 object-contain" />
+      </button>
+      <button className="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-200 dark:hover:bg-[#2A2A3B]">
+        <img src="/homePage/nopoint1.svg" className="w-5 h-5 object-contain" />
+      </button>
+    </div>
+
+    <div className="h-6 w-[1px] bg-gray-300 dark:bg-[#2A2A3B]" />
+
+    {/* SETTINGS */}
+    <button className="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-200 dark:hover:bg-[#2A2A3B]">
+      <img
+        src={theme === "Light" ? "/homePage/option.svg" : "/homePage/option(W).svg"}
+        className="w-5 h-5 object-contain"
+      />
+    </button>
+
+  </div>
+</div>
 
     </div>
   );
