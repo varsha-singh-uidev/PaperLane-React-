@@ -12,6 +12,10 @@ const NoteViewer = () => {
 
   // add the state to show the test of start writting
   const [content, setContent] = useState("");
+
+  // state to show the option for the text transformation
+  const [text, setText] = useState(false);
+  const [showText, setShowText] = useState("");
   
   // get the theme when the page mounts from the localStorage
   useEffect(() => {
@@ -98,49 +102,60 @@ const NoteViewer = () => {
 
     {/* FONT CONTROLS */}
     <div className="flex items-center gap-3">
-      <div className="flex items-center rounded-lg border border-gray-300 dark:border-[#2A2A3B] overflow-hidden">
-        <button className="px-3 py-1 text-sm">Aa</button>
-        <button className="px-2">
-          <img src="/icons/dropdown.svg" className="w-3" />
-        </button>
-      </div>
 
-      <div className="flex items-center rounded-lg border border-gray-300 dark:border-[#2A2A3B] overflow-hidden">
-        <button className="px-3 py-1 text-sm font-semibold">18</button>
-        <button className="px-2">
-          <img src="/icons/dropdown.svg" className="w-3" />
-        </button>
+    <div className={`flex items-center rounded-lg border relative
+    ${theme === "Light" ? "bg-white border-gray-700" : "bg-[#2A2A3B] border-[#3A3A4A]" }`}
+    onClick={() => setText(prev => !prev)}>
+     <button className={`cursor-pointer px-3 py-1 text-sm ${theme === "Light" ? "" : "text-[#D5D5D7]"}`}> Aa </button>
+     <button className={`cursor-pointer px-2 flex items-center justify-center`} >
+      <img src={theme === "Light" ? "/icons/dropdown.svg" : "/icons(W)/dropdown(W).svg"} className="w-3 h-3 object-contain"/>
+     </button>
+     {text && (
+      <div className='flex flex-col absolute bottom-12 left-0 bg-amber-200 z-100'>
+        <button>UpperCase</button>
+        <button>LowerCase</button>
+        <button>Capitalize</button>
       </div>
+     )}
+    </div>
+
+    <div className={`flex items-center rounded-lg border overflow-hidden
+    ${theme === "Light" ? "bg-white border-gray-700" : "bg-[#2A2A3B] border-[#3A3A4A]" }`}>
+     <button className={`cursor-pointer px-3 py-1 text-sm ${theme === "Light" ? "" : "text-[#D5D5D7]"}`}> 18 </button>
+     <button className={`cursor-pointer px-2 flex items-center justify-center`} >
+      <img src={theme === "Light" ? "/icons/dropdown.svg" : "/icons(W)/dropdown(W).svg"} className="w-3 h-3 object-contain"/>
+     </button>
+    </div>
     </div>
 
     <div className="h-6 w-[1px] bg-gray-300 dark:bg-[#2A2A3B]" />
 
     {/* COLOR */}
-    <div className="flex items-center gap-2">
-      <button className="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-200 dark:hover:bg-[#2A2A3B]">
-        <img src="/homePage/textColor.png" className="w-5 h-5 object-contain" />
+    <div className="flex items-center gap-3">
+      <button className={`w-10 h-10 flex items-center justify-center border rounded-lg cursor-pointer ${theme === "Light" ? "border-gray-700 hover:bg-gray-200" : " hover:bg-[#3A3A4A] bg-[#2A2A3B] border-[#3A3A4A]"}`}>
+        <img src={`${theme === "Light" ? "/homePage/textColor.png" : "/homePage/textColor(W).png"}`} className="w-5 h-5 object-contain" />
       </button>
-      <button className="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-200 dark:hover:bg-[#2A2A3B]">
-        <img src="/homePage/highlight.svg" className="w-5 h-5 object-contain" />
+      <button className={`w-10 h-10 flex items-center justify-center border rounded-lg cursor-pointer ${theme === "Light" ? "border-gray-700 hover:bg-gray-200" : " hover:bg-[#3A3A4A] bg-[#2A2A3B] border-[#3A3A4A]"}`}>
+        <img src={`${theme === "Light" ? "/homePage/highlight.svg" : "/homePage/highlight(W).png"}`} className="w-5 h-5 object-contain" />
       </button>
     </div>
 
     <div className="h-6 w-[1px] bg-gray-300 dark:bg-[#2A2A3B]" />
 
     {/* LIST */}
-    <div className="flex items-center gap-2">
-      <button className="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-200 dark:hover:bg-[#2A2A3B]">
-        <img src="/homePage/point1.svg" className="w-5 h-5 object-contain" />
+    <div className="flex items-center gap-3">
+      <button className={`w-10 h-10 flex items-center justify-center border rounded-lg cursor-pointer ${theme === "Light" ? "border-gray-700 hover:bg-gray-200" : " hover:bg-[#3A3A4A] bg-[#2A2A3B] border-[#3A3A4A]"}`}>
+        <img src={`${theme === "Light" ? "/homePage/point1.svg" : "/homePage/point1(W).svg"}`} className="w-5 h-5 object-contain" />
       </button>
-      <button className="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-200 dark:hover:bg-[#2A2A3B]">
-        <img src="/homePage/nopoint1.svg" className="w-5 h-5 object-contain" />
+      <button className={`w-10 h-10 flex items-center justify-center border rounded-lg cursor-pointer ${theme === "Light" ? "border-gray-700 hover:bg-gray-200" : " hover:bg-[#3A3A4A] bg-[#2A2A3B] border-[#3A3A4A]"}`}>
+        <img src={`${theme === "Light" ? "/homePage/nopoint1.svg" : "/homePage/nopoint1(W).svg"}`} className="w-5 h-4 object-contain" />
       </button>
     </div>
 
     <div className="h-6 w-[1px] bg-gray-300 dark:bg-[#2A2A3B]" />
 
     {/* SETTINGS */}
-    <button className="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-200 dark:hover:bg-[#2A2A3B]">
+    <button className="cursor-pointer w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-200 dark:hover:bg-[#2A2A3B]">
       <img
         src={theme === "Light" ? "/homePage/option.svg" : "/homePage/option(W).svg"}
         className="w-5 h-5 object-contain"
