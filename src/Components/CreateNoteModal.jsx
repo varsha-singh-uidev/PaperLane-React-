@@ -90,7 +90,7 @@ const CreateNoteModal = ({theme, onClose, onCreate}) => {
     let noteData = {
       id : Date.now(),
       title : noteTitle,
-      content : null,
+      content : "",
       password : (notePassword ?? ""),
       cover : selectedCover,
       createdAtDate : date,

@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import MainPageRoute from './MainPageRoute'
-
+import {useRef} from "react";
 
 const NoteViewer = () => {
   const location = useLocation();
   const {note} = location.state || {};
-  
+  const editorRef = useRef(null);
+
   // state for the theme of the app
   const [theme, setTheme] = useState("Light");
 
@@ -14,8 +15,8 @@ const NoteViewer = () => {
   const [content, setContent] = useState("");
 
   // state to show the option for the text transformation
-  const [text, setText] = useState(false);
-  const [showText, setShowText] = useState("");
+  const [showText, setShowText] = useState(false); //open the option panel
+  const [text, setText] = useState("Aa"); //save the option for the future implementation
   
   // get the theme when the page mounts from the localStorage
   useEffect(() => {
@@ -63,9 +64,10 @@ const NoteViewer = () => {
       {/* main note content */}
       <div className="flex-1 w-full px-6 md:px-20 py-4 pb-28 overflow-y-auto">
         <div
+        ref={editorRef}
         contentEditable
         suppressContentEditableWarning={true}
-        onInput={(e) => setContent(e.currentTarget.innerText)}
+        onInput={(e) => setContent(e.currentTarget.innerHTML)}
         className={`outline-none w-full min-h-[50vh] text-[16px] leading-7 relative
         ${theme === "Light" ? "bg-white text-black" : "bg-[#12121A] text-gray-200"}`}
         >
@@ -104,18 +106,25 @@ const NoteViewer = () => {
     <div className="flex items-center gap-3">
 
     <div className={`flex items-center rounded-lg border relative
-    ${theme === "Light" ? "bg-white border-gray-700" : "bg-[#2A2A3B] border-[#3A3A4A]" }`}
-    onClick={() => setText(prev => !prev)}>
-     <button className={`cursor-pointer px-3 py-1 text-sm ${theme === "Light" ? "" : "text-[#D5D5D7]"}`}> Aa </button>
-     <button className={`cursor-pointer px-2 flex items-center justify-center`} >
+    ${theme === "Light" ? "bg-white border-gray-700" : "bg-[#2A2A3B] border-[#3A3A4A]" }`}>
+     <button  onClick={() => setShowText(prev => !prev)} className={`cursor-pointer px-3 py-1 text-sm ${theme === "Light" ? "" : "text-[#D5D5D7]"}`}> {text || "Aa"} </button>
+     <button  onClick={() => setShowText(prev => !prev)} className={`cursor-pointer px-2 flex items-center justify-center`} >
       <img src={theme === "Light" ? "/icons/dropdown.svg" : "/icons(W)/dropdown(W).svg"} className="w-3 h-3 object-contain"/>
      </button>
-     {text && (
-      <div className='flex flex-col absolute bottom-12 left-0 bg-amber-200 z-100'>
-        <button>UpperCase</button>
-        <button>LowerCase</button>
-        <button>Capitalize</button>
-      </div>
+     {showText && (
+      <ul className={`flex flex-col gap-2 absolute bottom-full mb-2 left-0 rounded-md z-50 py-2 border ${theme === "Light" ? "bg-white text-gray-700" : "bg-[#1F1F2E] text-gray-200 border-[#3A3A4A]"}`}>
+       {["UpperCase", "LowerCase", "Capitalize"].map((option) => (
+        <li
+        key = {option}
+        className='hover:bg-gray-100/30 hover:text-blue-400 px-3 rounded-sm'
+        onClick={() => {
+          setText(option);
+          setShowText(false);
+        }}>
+          {option}
+        </li>
+       ))}
+      </ul>
      )}
     </div>
 
