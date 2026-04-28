@@ -10,19 +10,59 @@ const NoteViewer = () => {
 
   // state for the theme of the app
   const [theme, setTheme] = useState("Light");
-
-  // add the state to show the test of start writting
-  const [content, setContent] = useState("");
+  
+  // state to add the content into the note
+  const [content, setContent] = useState(""); 
 
   // state to show the option for the text transformation
   const [showText, setShowText] = useState(false); //open the option panel
   const [text, setText] = useState("Aa"); //save the option for the future implementation
   
-  // get the theme when the page mounts from the localStorage
+   // ✅ FIX: Prevent crash if user refreshes page (note becomes undefined)
+  if (!note) {
+    return <div className="p-10">No note found</div>;
+  }
+
+  // get the theme when the page mounts from the localStorage (Load Theme)
   useEffect(() => {
     let themeApp = localStorage.getItem("appTheme");
     setTheme(themeApp);
   }, []);
+
+  // Load content from localStorage
+  useEffect(() => {
+    if(!note) return; 
+
+    const storedNotes = JSON.parse(localStorage.getItem("paperlane_notes")) || [];
+
+    const currentNotes = storedNotes.find(n => n.id === note.id);
+
+    if(currentNotes){
+      const savedContent = currentNotes.content || "";
+      setContent(savedContent);
+
+      if(editorRef.current){
+        editorRef.current.innerHTML = savedContent;
+      }
+    }
+  }, [note]);
+
+  // save function it run when the user click on the save on the note to save the changes into the localStorage
+  function handleSave(){
+    const storedNotes = JSON.parse(localStorage.getItem("paperlane_notes")) || [];
+
+    const updateNotes = storedNotes.map(n => {
+      if(n.id === note.id){
+        return{
+          ...n,
+          content: content,
+          updatedAt: new Date()
+        };
+      }
+      return n;
+    });
+    localStorage.setItem("paperlane_notes", JSON.stringify(updateNotes));
+  }
 
   return (
     <div className={`w-full min-h-screen flex flex-col ${theme === "Light" ? "bg-white" : "bg-[#12121A]"}`}>
@@ -40,7 +80,8 @@ const NoteViewer = () => {
         <div className="flex w-[150px] items-center justify-between">
           <img src={`${theme === "Light" ? "/icons/undo.svg" : "/icons(W)/undo(W).svg"}`} alt=""  className='w-[25px]'/>
           <img src={`${theme === "Light" ? "/icons/redo.svg" : "/icons(W)/redo(W).svg"}`} alt="" className='w-[25px]'/>
-          <img src={`${theme === "Light" ? "/icons/saveNote.svg" : "/icons(W)/saveNote(W).svg"}`} alt="" className='w-[25px]'/>
+          {/* attach the handleSave function to the button */}
+          <img onClick={handleSave} src={`${theme === "Light" ? "/icons/saveNote.svg" : "/icons(W)/saveNote(W).svg"}`} alt="" className='w-[25px]'/>
         </div>
 
       </div>
@@ -50,11 +91,12 @@ const NoteViewer = () => {
       {/* show the date of the page */}
       <div className='p-5'>
         <div className={`flex justify-center gap-2 ${theme === "Light" ? "text-black/25" : "text-gray-200/25"}`}>
-          <p>{new Date (note.updatedAt).toLocaleDateString("en-US",{
-                month : "long",
-                day : "numeric",
-                year : "numeric"
-              })}
+          <p>
+            {note && new Date(note.updatedAt).toLocaleDateString("en-US",{
+              month : "long",
+              day : "numeric",
+              year : "numeric"
+            })}
           </p>
           <p>|</p>
           <p>Saved "logic"</p>
@@ -71,11 +113,11 @@ const NoteViewer = () => {
         className={`outline-none w-full min-h-[50vh] text-[16px] leading-7 relative
         ${theme === "Light" ? "bg-white text-black" : "bg-[#12121A] text-gray-200"}`}
         >
-        {content === "" && (
+        {/* {content === "" && (
           <span className="absolute top-0 left-0 text-gray-400 pointer-events-none">
             Start Writting...
           </span>
-        )}
+        )} */}
         </div>
       </div>     
 
