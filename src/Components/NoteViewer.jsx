@@ -14,11 +14,19 @@ const NoteViewer = () => {
   // state to add the content into the note
   const [content, setContent] = useState(""); 
 
+  // state to show the status of note update
+  const [saveStatus, setSaveStatus] = useState("");
+
+  // state for the text style
+  const [isBold, setIsBold] = useState(false);
+  const [isItalic, setIsItalic] = useState(false);
+  const [isUnderline, setIsUnderline] = useState(false);
+
   // state to show the option for the text transformation
   const [showText, setShowText] = useState(false); //open the option panel
   const [text, setText] = useState("Aa"); //save the option for the future implementation
   
-   // ✅ FIX: Prevent crash if user refreshes page (note becomes undefined)
+   // Prevent crash if user refreshes page (note becomes undefined)
   if (!note) {
     return <div className="p-10">No note found</div>;
   }
@@ -61,7 +69,45 @@ const NoteViewer = () => {
       }
       return n;
     });
+
     localStorage.setItem("paperlane_notes", JSON.stringify(updateNotes));
+
+    // updating the save note state
+    setSaveStatus("| Saving...");
+
+    setTimeout(() => {
+      setSaveStatus("| Saved");
+    }, 2000);
+  }
+
+  // function run on the click of the text style
+  function handleFormat(command){
+    if(!editorRef.current) return; //make sure editor exists
+
+    editorRef.current.focus(); // bring cursor/selection back to editor
+
+    document.execCommand(command, false, null); //Apply formatting to selected text or next type text
+    
+    updateFormatState(); // force update immediately
+  }
+
+  // this function actually check the browser to get the current position of the button and update the state of the button accordingly and also work when the editor is empty to false the formatting
+  function updateFormatState(){
+    if (!editorRef.current) return;
+
+    const selection = window.getSelection();
+
+    // prevent false active state when editor is empty
+    if (!selection || selection.rangeCount === 0 || editorRef.current.innerText === "") {
+      setIsBold(false);
+      setIsItalic(false);
+      setIsUnderline(false);
+      return;
+    }
+
+    setIsBold(document.queryCommandState("bold"));
+    setIsItalic(document.queryCommandState("italic"));
+    setIsUnderline(document.queryCommandState("underline"));
   }
 
   return (
@@ -80,8 +126,11 @@ const NoteViewer = () => {
         <div className="flex w-[150px] items-center justify-between">
           <img src={`${theme === "Light" ? "/icons/undo.svg" : "/icons(W)/undo(W).svg"}`} alt=""  className='w-[25px]'/>
           <img src={`${theme === "Light" ? "/icons/redo.svg" : "/icons(W)/redo(W).svg"}`} alt="" className='w-[25px]'/>
+          
           {/* attach the handleSave function to the button */}
-          <img onClick={handleSave} src={`${theme === "Light" ? "/icons/saveNote.svg" : "/icons(W)/saveNote(W).svg"}`} alt="" className='w-[25px]'/>
+          <img onClick={handleSave} 
+          src={`${theme === "Light" ? "/icons/saveNote.svg" : "/icons(W)/saveNote(W).svg"}`} alt="save note button" 
+          className={`w-[25px] ${saveStatus === "Saving..." ? "opacity-50 cursor-not-allowed" : "cursor-pointer hover:scale-110 active:scale-95 hover:opacity-80" } transition-all duration-200`}/>
         </div>
 
       </div>
@@ -98,8 +147,7 @@ const NoteViewer = () => {
               year : "numeric"
             })}
           </p>
-          <p>|</p>
-          <p>Saved "logic"</p>
+          <p> {saveStatus}</p>
         </div>
       </div>
 
@@ -110,14 +158,11 @@ const NoteViewer = () => {
         contentEditable
         suppressContentEditableWarning={true}
         onInput={(e) => setContent(e.currentTarget.innerHTML)}
+        onKeyUp={updateFormatState}
+        onMouseUp={updateFormatState}
         className={`outline-none w-full min-h-[50vh] text-[16px] leading-7 relative
         ${theme === "Light" ? "bg-white text-black" : "bg-[#12121A] text-gray-200"}`}
         >
-        {/* {content === "" && (
-          <span className="absolute top-0 left-0 text-gray-400 pointer-events-none">
-            Start Writting...
-          </span>
-        )} */}
         </div>
       </div>     
 
@@ -131,13 +176,13 @@ const NoteViewer = () => {
     
     {/* TEXT STYLE */}
     <div className="flex items-center gap-3">
-      <button className="p-2 rounded-md hover:bg-gray-200 dark:hover:bg-[#2A2A3B] transition">
+      <button onClick={() => handleFormat("bold")} className={`p-2 rounded-md cursor-pointer transition hover:bg-gray-200 dark:hover:bg-[#2A2A3B] ${isBold ? "bg-[#2A2A3B]" : ""}`}>
         <img className="h-[18px]" src={`${theme === "Light" ? "/homePage/bold.svg" : "/homePage/bold(W).svg"}`} />
       </button>
-      <button className="p-2 rounded-md hover:bg-gray-200 dark:hover:bg-[#2A2A3B] transition">
+      <button onClick={() => handleFormat("italic")} className={`p-2 rounded-md cursor-pointer transition hover:bg-gray-200 dark:hover:bg-[#2A2A3B] ${isItalic ? "bg-[#2A2A3B]" : ""}`}>
         <img className="h-[22px]" src={`${theme === "Light" ? "/homePage/italic.svg" : "/homePage/italic(W).svg"}`} />
       </button>
-      <button className="p-2 rounded-md hover:bg-gray-200 dark:hover:bg-[#2A2A3B] transition">
+      <button onClick={() => handleFormat("underline")} className={`p-2 rounded-md cursor-pointer transition hover:bg-gray-200 dark:hover:bg-[#2A2A3B] ${isUnderline ? "bg-[#2A2A3B]" : ""}`}>
         <img className="h-[22px]" src={`${theme === "Light" ? "/homePage/underLine.svg" : "/homePage/underLine(W).svg"}`} />
       </button>
     </div>
